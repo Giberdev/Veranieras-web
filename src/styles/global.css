@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: retro --default;
+}
+
+:root {
+/* Fondos y Neutros */
+  --color-bg: #FCF9F2;       /* Ivory (Fondo principal) */
+  --color-neutral: #F7E7E8;  /* Petal Brush (Fondo de secciones o tarjetas) */
+  
+  /* Marca Principal */
+  --color-primary: #CC1F4A;      /* Crimson (Títulos importantes) */
+  --color-primary-dark: #5C1A2A; /* Deep Wine (Texto de lectura / Botones elegantes) */
+  
+  /* Secundarios (Energía) */
+  --color-secondary-1: #E84B10;  /* Vermillion (Llamadas a la acción / Ofertas) */
+  --color-secondary-2: #F5C020;  /* Golden Sun (Iconos / Detalles de verano) */
+  
+  /* Acentos (Variedad) */
+  --color-accent-mauve: #C07090; /* Mauve */
+  --color-accent-rose: #E89AAE;  /* Rose Petal */
+  --color-accent-sage: #8EAD3C;  /* Sage Green (Naturaleza / Contraste) */
+}
