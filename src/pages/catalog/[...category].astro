@@ -1,0 +1,199 @@
+---
+// src/pages/catalog/[...category].astro
+import MainLayout from "../../layouts/MainLayout.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import { CATEGORIES } from "../../data/products";
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  return [
+    { params: { category: undefined } }, // Para /catalog
+    { params: { category: 'todas' } },   // Alias opcional
+    { params: { category: 'aretes' } },
+    { params: { category: 'collares' } },
+    { params: { category: 'anillos' } },
+    { params: { category: 'pulseras' } },
+    { params: { category: 'personalizacion' } }
+  ];
+}
+
+const { category } = Astro.params;
+const categoryParam = category && category !== 'todas' ? category : 'todas';
+
+// Obtener los productos de la colección
+const allProducts = await getCollection('productos');
+
+// Filter products based on the category
+const filteredProducts = categoryParam === "todas" 
+  ? allProducts 
+  : allProducts.filter((p: CollectionEntry<'productos'>) => p.data.category === categoryParam);
+
+const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name || "Catálogo";
+---
+
+<MainLayout title={`Catálogo | ${currentCategoryName}`}>
+  <div class="catalog-page">
+    <header class="catalog-header" transition:animate="fade">
+      <div class="container">
+        <span class="subtitle">EXPLORA NUESTRAS JOYAS</span>
+        <h1 class="main-title">{currentCategoryName}</h1>
+        <p class="description">Piezas únicas diseñadas para resaltar tu belleza natural.</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Filter Bar -->
+      <div class="filter-bar-container" transition:name="filter-bar">
+        <nav class="filter-bar">
+          {CATEGORIES.map(cat => (
+            <a 
+              href={cat.id === 'todas' ? '/catalog' : `/catalog/${cat.id}`} 
+              class={`filter-btn ${categoryParam === cat.id ? 'active' : ''}`}
+            >
+              {cat.name}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" transition:animate="slide">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product: CollectionEntry<'productos'>, index) => (
+            <ProductCard product={product.data} eager={index < 4} />
+          ))
+        ) : (
+          <div class="no-products">
+            <p>Próximamente tendremos más piezas en esta categoría.</p>
+            <a href="/catalog" class="back-btn">Ver todo el catálogo</a>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .catalog-page {
+    padding-top: 100px; /* Space for fixed navbar */
+    background-color: #FDFBF7;
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .catalog-header {
+    text-align: center;
+    padding: 60px 0;
+    background: linear-gradient(to bottom, #FFF, #FDFBF7);
+  }
+
+  .subtitle {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--brand-vermillion);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .main-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    color: #2D2D2D;
+    margin-bottom: 15px;
+  }
+
+  .description {
+    color: #8C8C8C;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+  }
+
+  /* Filter Bar */
+  .filter-bar-container {
+    position: sticky;
+    top: 20px;
+    z-index: 40;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    padding: 0 10px; /* Slight padding for mobile */
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    background: #FFFFFF;
+    padding: 8px;
+    border-radius: 50px;
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.05), 0 5px 15px -5px rgba(232, 75, 16, 0.05);
+    border: 1px solid rgba(232, 75, 16, 0.1);
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .filter-bar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  .filter-btn {
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 30px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover {
+    color: var(--brand-vermillion);
+    background: rgba(232, 75, 16, 0.04);
+  }
+
+  .filter-btn.active {
+    background: var(--brand-vermillion);
+    color: white;
+    box-shadow: 0 8px 20px rgba(232, 75, 16, 0.25);
+  }
+
+  /* Grid */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    padding-bottom: 100px;
+  }
+
+  .no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 100px 0;
+    color: #8C8C8C;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    color: var(--brand-vermillion);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 2px solid var(--brand-vermillion);
+  }
+
+  @media (max-width: 768px) {
+    .main-title { font-size: 2.5rem; }
+    .filter-bar-container { top: 15px; justify-content: flex-start; }
+  }
+</style>

@@ -1,0 +1,9 @@
+{
+  "id": "an2",
+  "name": "Anillo 2",
+  "price": 45.0,
+  "category": "anillos",
+  "description": "Anillo con diseño único y elegante.",
+  "image": "../../assets/productos/anillo2.jpg",
+  "isNew": true
+}

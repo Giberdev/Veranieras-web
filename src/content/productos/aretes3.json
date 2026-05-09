@@ -1,0 +1,9 @@
+{
+  "id": "a3",
+  "name": "Aretes 3",
+  "price": 45.0,
+  "category": "aretes",
+  "description": "Elegantes aretes inspirados en la brisa del mar.",
+  "image": "../../assets/productos/aretes3.jpg",
+  "isNew": true
+}

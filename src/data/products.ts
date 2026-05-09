@@ -71,7 +71,7 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const CATEGORIES = [
-  { id: 'todos', name: 'Todos' },
+  { id: 'todas', name: 'Todas' },
   { id: 'aretes', name: 'Aretes' },
   { id: 'collares', name: 'Collares' },
   { id: 'anillos', name: 'Anillos' },

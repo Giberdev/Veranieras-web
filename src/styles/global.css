@@ -1,23 +1,55 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: retro --default;
+  themes: veranieras;
 }
 
 :root {
-/* Fondos y Neutros */
-  --color-bg: #FCF9F2;       /* Ivory (Fondo principal) */
-  --color-neutral: #F7E7E8;  /* Petal Brush (Fondo de secciones o tarjetas) */
-  
   /* Marca Principal */
-  --color-primary: #CC1F4A;      /* Crimson (Títulos importantes) */
-  --color-primary-dark: #5C1A2A; /* Deep Wine (Texto de lectura / Botones elegantes) */
+  --brand-ivory: #FCF9F2;       /* Fondo principal */
+  --brand-petal: #F7E7E8;       /* Neutro/Tarjetas */
+  --brand-crimson: #CC1F4A;     /* Títulos */
+  --brand-wine: #5C1A2A;        /* Texto / Botones */
+  --brand-vermillion: #E84B10;  /* CTA */
+  --brand-gold: #F5C020;        /* Detalles / Iconos */
+  --brand-text: #472612;        /* Texto general */
+}
+
+[data-theme="veranieras"] {
+  --color-base-100: #FCF9F2;    /* Corresponde a brand-ivory */
+  --color-primary: #CC1F4A;
+  --color-primary-content: #ffffff;
+  --color-secondary: #F5C020;
+  --color-accent: #E84B10;
+  --color-neutral: #5C1A2A;
+  --color-neutral-content: #ffffff;
   
-  /* Secundarios (Energía) */
-  --color-secondary-1: #E84B10;  /* Vermillion (Llamadas a la acción / Ofertas) */
-  --color-secondary-2: #F5C020;  /* Golden Sun (Iconos / Detalles de verano) */
-  
-  /* Acentos (Variedad) */
-  --color-accent-mauve: #C07090; /* Mauve */
-  --color-accent-rose: #E89AAE;  /* Rose Petal */
-  --color-accent-sage: #8EAD3C;  /* Sage Green (Naturaleza / Contraste) */
+  /* Ajustes estéticos */
+  --rounded-box: 1.5rem;
+  --rounded-btn: 0.3rem;
+  --rounded-badge: 1.9rem;
+  --animation-btn: 0.25s;
+  --animation-input: 0.2s;
+  --btn-focus-scale: 0.95;
+  --border-btn: 1px;
+}
+
+@theme {
+  --color-brand-ivory: var(--brand-ivory);
+  --color-brand-petal: var(--brand-petal);
+  --color-brand-crimson: var(--brand-crimson);
+  --color-brand-wine: var(--brand-wine);
+  --color-brand-vermillion: var(--brand-vermillion);
+  --color-brand-gold: var(--brand-gold);
+}
+
+body {
+  background-color: var(--brand-ivory);
+  color: var(--brand-text);
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+}
+
+.italic-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
 }

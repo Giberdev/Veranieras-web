@@ -52,18 +52,18 @@ const categories = [
       <div class="top-decoration">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L13.5 10.5L22 12L13.5 13.5L12 22L10.5 13.5L2 12L10.5 10.5L12 2Z" fill="#F5C020"/></svg>
       </div>
-      <span class="subtitle">NUESTRO CATÁLOGO</span>
-      <h2 class="main-title">Encuentra tu esencia de <span class="italic-brand">verano</span></h2>
+      <span class="subtitle">NUESTRAS CATEGORÍAS</span>
+      <h2 class="main-title">Encuentra tu esencia de <span class="italic-brand font-light text-neutral-900">verano</span></h2>
       <p class="section-desc">
         Explora nuestras categorías y descubre piezas hechas para brillar contigo.
       </p>
     </header>
 
     <div class="categories-grid">
-      {categories.map((category) => (
-        <a href={`/catalog?category=${category.id}`} class="category-card">
+      {categories.map((category, index) => (
+        <a href={`/catalog/${category.id}`} class="category-card">
           <div class="image-wrapper">
-            <Image src={category.image} alt={category.title} class="category-image" />
+            <Image src={category.image} alt={category.title} class="category-image" loading={index < 2 ? "eager" : "lazy"} />
           </div>
           
           <div class="card-body">
@@ -87,7 +87,7 @@ const categories = [
 <style>
   .categories-section {
     padding: 100px 20px;
-    background-color: #FDFBF7;
+    background-color: var(--brand-ivory);
     font-family: 'Outfit', sans-serif;
   }
 
@@ -108,14 +108,14 @@ const categories = [
   }
 
   .top-decoration :global(svg) {
-    fill: #F5C020 !important;
+    fill: var(--brand-gold) !important;
   }
 
   .subtitle {
     display: block;
     font-size: 12px;
     letter-spacing: 3px;
-    color: #F5C020 !important;
+    color: var(--brand-vermillion) !important;
     margin-bottom: 10px;
     font-weight: 600;
   }
@@ -123,13 +123,12 @@ const categories = [
   .main-title {
     font-family: 'Playfair Display', serif;
     font-size: 3rem;
-    color: #2D2D2D;
     margin-bottom: 15px;
   }
 
   .italic-brand { 
     font-style: italic; 
-    color: #F5C020 !important; 
+    color: var(--brand-vermillion) !important; 
   }
 
   .section-desc {
@@ -151,18 +150,20 @@ const categories = [
   .category-card {
     background: #FFFFFF;
     border-radius: 24px;
+    border: 1px solid rgba(232, 75, 16, 0.12);
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.05);
   }
 
   .category-card:hover { 
     transform: translateY(-12px); 
-    box-shadow: 0 30px 60px -12px rgba(245, 192, 32, 0.15);
+    box-shadow: 0 30px 60px -12px rgba(232, 75, 16, 0.18);
+    border-color: rgba(232, 75, 16, 0.3);
   }
 
   .image-wrapper {
@@ -205,14 +206,17 @@ const categories = [
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #F5C020 !important;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    color: var(--brand-vermillion) !important;
+    box-shadow: 
+      0 10px 25px rgba(0, 0, 0, 0.08), 
+      0 4px 10px rgba(0, 0, 0, 0.04);
   }
 
   .floating-icon :global(svg) {
     width: 28px !important;
     height: 28px !important;
     stroke: currentColor !important;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
   }
 
   .category-name {
@@ -220,7 +224,7 @@ const categories = [
     letter-spacing: 2px;
     font-weight: 600;
     margin-bottom: 10px;
-    color: #2D2D2D;
+    color: var(--brand-wine);
   }
 
   .category-info {
@@ -231,7 +235,7 @@ const categories = [
   }
 
   .arrow-icon { 
-    color: #F5C020 !important; 
+    color: var(--brand-vermillion) !important; 
     transition: transform 0.3s ease;
   }
 

@@ -1,0 +1,9 @@
+{
+  "id": "a1",
+  "name": "Pendientes Brisa Marina",
+  "price": 45.0,
+  "category": "aretes",
+  "description": "Elegantes aretes inspirados en la brisa del mar.",
+  "image": "../../assets/productos/aretes1.jpg",
+  "isNew": true
+}

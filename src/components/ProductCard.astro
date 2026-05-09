@@ -12,9 +12,10 @@ interface Props {
     description: string;
     isNew?: boolean;
   };
+  eager?: boolean;
 }
 
-const { product } = Astro.props;
+const { product, eager = false } = Astro.props;
 
 // For now, if it's a string starting with /src/assets, we might need to handle it 
 // but since we're using static data, we'll try to use the image prop directly if passed as import.
@@ -24,7 +25,7 @@ const { product } = Astro.props;
 <div class="product-card">
   <div class="image-container">
     {product.isNew && <span class="badge">NUEVO</span>}
-    <Image src={product.image} alt={product.name} class="product-image" />
+    <Image src={product.image} alt={product.name} class="product-image" loading={eager ? "eager" : "lazy"} />
     <div class="overlay">
       <button class="view-btn">VER DETALLE</button>
     </div>
@@ -74,7 +75,7 @@ const { product } = Astro.props;
     position: absolute;
     top: 15px;
     left: 15px;
-    background: #F5C020;
+    background: var(--brand-vermillion);
     color: white;
     padding: 4px 12px;
     border-radius: 20px;
@@ -127,7 +128,7 @@ const { product } = Astro.props;
   .category-tag {
     font-size: 10px;
     text-transform: uppercase;
-    color: #F5C020;
+    color: var(--brand-gold);
     letter-spacing: 2px;
     font-weight: 600;
     margin-bottom: 8px;

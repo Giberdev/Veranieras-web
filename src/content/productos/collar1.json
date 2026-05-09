@@ -1,0 +1,9 @@
+{
+  "id": "c1",
+  "name": "Collar Sol de Verano",
+  "price": 65.0,
+  "category": "collares",
+  "description": "Una pieza central que captura la luz del sol.",
+  "image": "../../assets/productos/collar1.jpg",
+  "isNew": true
+}
