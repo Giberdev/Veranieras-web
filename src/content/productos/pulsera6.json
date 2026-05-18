@@ -1,0 +1,9 @@
+{
+  "id": "p6",
+  "name": "Pulsera 6",
+  "price": 45.0,
+  "category": "pulseras",
+  "description": "Pulsera con diseño único y elegante.",
+  "image": "../../assets/productos/pulsera6.jpg",
+  "isNew": true
+}

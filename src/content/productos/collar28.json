@@ -1,0 +1,9 @@
+{
+  "id": "c28",
+  "name": "Collar 28",
+  "price": 65.0,
+  "category": "collares",
+  "description": "Collar con diseño único y elegante.",
+  "image": "../../assets/productos/collar28.jpg",
+  "isNew": true
+}

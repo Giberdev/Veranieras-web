@@ -60,7 +60,7 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
       <div class="products-grid" transition:animate="slide">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product: CollectionEntry<'productos'>, index) => (
-            <ProductCard product={product.data} eager={index < 4} />
+            <ProductCard product={product.data} slug={product.id} eager={index < 4} />
           ))
         ) : (
           <div class="no-products">
@@ -75,8 +75,7 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
 
 <style>
   .catalog-page {
-    padding-top: 100px; /* Space for fixed navbar */
-    background-color: #FDFBF7;
+    background-color: var(--brand-ivory);
     min-height: 100vh;
     font-family: 'Outfit', sans-serif;
   }
@@ -89,8 +88,9 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
 
   .catalog-header {
     text-align: center;
-    padding: 60px 0;
-    background: linear-gradient(to bottom, #FFF, #FDFBF7);
+    padding-top: 140px; /* Espacio para el navbar absoluto flotante */
+    padding-bottom: 60px;
+    background: linear-gradient(to bottom, var(--brand-ivory), rgba(252, 249, 242, 0.4));
   }
 
   .subtitle {
@@ -103,7 +103,7 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
   }
 
   .main-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-size: 3.5rem;
     color: #2D2D2D;
     margin-bottom: 15px;

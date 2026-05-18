@@ -1,0 +1,9 @@
+{
+  "id": "c12",
+  "name": "Collar 12",
+  "price": 65.0,
+  "category": "collares",
+  "description": "Collar con diseño único y elegante.",
+  "image": "../../assets/productos/collar12.jpg",
+  "isNew": true
+}

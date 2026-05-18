@@ -8,26 +8,25 @@ interface Props {
     name: string;
     price: number;
     category: string;
-    image: any; // We'll handle both string paths and imports
+    image: any;
     description: string;
     isNew?: boolean;
   };
+  slug?: string;
   eager?: boolean;
 }
 
-const { product, eager = false } = Astro.props;
+const { product, slug, eager = false } = Astro.props;
 
-// For now, if it's a string starting with /src/assets, we might need to handle it 
-// but since we're using static data, we'll try to use the image prop directly if passed as import.
-// For this demo, let's assume images are passed correctly.
+const productUrl = slug ? `/catalog/producto/${slug}` : '#';
 ---
 
-<div class="product-card">
+<a href={productUrl} class="product-card" transition:name={`image-container-${slug || product.id}`}>
   <div class="image-container">
     {product.isNew && <span class="badge">NUEVO</span>}
     <Image src={product.image} alt={product.name} class="product-image" loading={eager ? "eager" : "lazy"} />
     <div class="overlay">
-      <button class="view-btn">VER DETALLE</button>
+      <span class="view-btn">VER DETALLE</span>
     </div>
   </div>
   
@@ -36,39 +35,43 @@ const { product, eager = false } = Astro.props;
     <h3 class="product-name">{product.name}</h3>
     <p class="product-price">${product.price.toFixed(2)}</p>
   </div>
-</div>
+</a>
 
 <style>
   .product-card {
+    display: block;
+    text-decoration: none;
     background: white;
-    border-radius: 20px;
+    border-radius: 24px; /* Unificado con Categories.astro */
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
-    border: 1px solid rgba(0,0,0,0.03);
+    border: 1px solid rgba(232, 75, 16, 0.12); /* Borde sutil naranja de Categories.astro */
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.05); /* Sombra unificada */
   }
 
   .product-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    box-shadow: 0 20px 40px rgba(92, 26, 42, 0.08);
+    border-color: rgba(232, 75, 16, 0.45); /* Hover activo unificado */
   }
 
   .image-container {
     position: relative;
     aspect-ratio: 1/1;
     overflow: hidden;
-    background: #F9F9F9;
+    background: #FDFBF7;
   }
 
   .product-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 
   .product-card:hover .product-image {
-    transform: scale(1.1);
+    transform: scale(1.08);
   }
 
   .badge {
@@ -91,7 +94,7 @@ const { product, eager = false } = Astro.props;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.2);
+    background: rgba(92, 26, 42, 0.15); /* Tinted background for luxury feel */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -105,15 +108,16 @@ const { product, eager = false } = Astro.props;
 
   .view-btn {
     background: white;
-    color: #2D2D2D;
+    color: var(--brand-wine);
     border: none;
     padding: 12px 24px;
     border-radius: 30px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    cursor: pointer;
+    letter-spacing: 1px;
     transform: translateY(20px);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
   }
 
   .product-card:hover .view-btn {
@@ -123,6 +127,7 @@ const { product, eager = false } = Astro.props;
   .product-info {
     padding: 20px;
     text-align: center;
+    background: white;
   }
 
   .category-tag {
@@ -136,16 +141,22 @@ const { product, eager = false } = Astro.props;
   }
 
   .product-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: #2D2D2D;
+    font-family: 'Cormorant Garamond', serif; 
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--brand-wine);
     margin: 5px 0 10px;
+    transition: color 0.3s ease;
+  }
+
+  .product-card:hover .product-name {
+    color: var(--brand-vermillion);
   }
 
   .product-price {
     font-family: 'Outfit', sans-serif;
     font-weight: 600;
-    color: #555;
+    color: #6E5A4F;
     font-size: 1rem;
   }
 </style>

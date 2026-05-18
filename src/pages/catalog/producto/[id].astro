@@ -1,0 +1,384 @@
+---
+// src/pages/catalog/producto/[id].astro
+import MainLayout from "../../../layouts/MainLayout.astro";
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import ProductCard from "../../../components/ProductCard.astro";
+import Button from "../../../components/ui/Button.astro";
+
+// Generar rutas estáticas basadas en los IDs de los JSONs locales
+export async function getStaticPaths() {
+  const products = await getCollection('productos');
+  return products.map(p => ({
+    params: { id: p.id },
+    props: { product: p }
+  }));
+}
+
+const { product } = Astro.props;
+
+// Obtener todas las piezas para la sección de productos recomendados
+const allProducts = await getCollection('productos');
+// Filtrar por la misma categoría excluyendo el producto actual para la sección cruzada
+const relatedProducts = allProducts
+  .filter(p => p.data.category === product.data.category && p.id !== product.id)
+  .slice(0, 3);
+
+// Configuración de redirección segura a WhatsApp
+const PHONE_NUMBER = "573127894556"; // Número de WhatsApp configurado para la tienda
+const messageText = `¡Hola Veranieras! ✨ Estoy muy interesada en el producto "${product.data.name}" (Código: ${product.data.id}) con un valor de $${product.data.price.toFixed(2)}. ¿Me podrían confirmar disponibilidad y los medios de pago? ¡Muchas gracias! 💛`;
+const whatsappUrl = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(messageText)}`;
+---
+
+<MainLayout title={`Veranieras | ${product.data.name}`}>
+  <div class="product-detail-page">
+    <div class="container">
+      
+      <!-- Breadcrumbs de navegación -->
+      <nav class="breadcrumbs">
+        <a href="/">Inicio</a>
+        <span class="separator">/</span>
+        <a href="/catalog">Catálogo</a>
+        <span class="separator">/</span>
+        <a href={`/catalog/${product.data.category}`} class="category-link">{product.data.category}</a>
+        <span class="separator">/</span>
+        <span class="current">{product.data.name}</span>
+      </nav>
+
+      <!-- Fila de Detalles Principal -->
+      <div class="detail-grid">
+        <!-- Columna Izquierda: Imagen del Producto -->
+        <div class="image-column" transition:name={`image-container-${product.id}`}>
+          <div class="image-wrapper shadow-luxury">
+            {product.data.isNew && <span class="badge-new">NUEVO</span>}
+            <Image 
+              src={product.data.image} 
+              alt={product.data.name} 
+              class="product-image"
+              loading="eager"
+              quality="high"
+            />
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Información y CTA -->
+        <div class="content-column" transition:animate="fade">
+          <span class="category-tag">{product.data.category}</span>
+          <h1 class="product-title">{product.data.name}</h1>
+          <p class="product-price">${product.data.price.toFixed(2)}</p>
+          
+          <div class="divider"></div>
+
+          <h3 class="section-title">Descripción</h3>
+          <p class="product-description">{product.data.description}</p>
+          
+          <!-- Lista de beneficios premium del producto -->
+          <ul class="product-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+              <span>Diseño exclusivo hecho a mano</span>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>Materiales premium e hipoalergénicos</span>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <span>Envíos seguros a nivel nacional</span>
+            </li>
+          </ul>
+
+          <!-- Botón de Redirección a WhatsApp (Reutilizable y Accesible) -->
+          <div class="cta-container">
+            <Button 
+              href={whatsappUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              variant="whatsapp" 
+              size="lg" 
+              className="group flex items-center gap-3 w-full sm:w-auto"
+            >
+              <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              <span>Comprar por WhatsApp</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Productos Relacionados -->
+      {relatedProducts.length > 0 && (
+        <section class="related-section">
+          <div class="divider"></div>
+          <span class="related-subtitle">COMPLEMENTA TU ESTILO</span>
+          <h2 class="related-title">Piezas Similares</h2>
+          <div class="related-grid">
+            {relatedProducts.map((p, index) => (
+              <ProductCard product={p.data} slug={p.id} eager={index === 0} />
+            ))}
+          </div>
+        </section>
+      )}
+
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .product-detail-page {
+    padding-top: 140px;
+    padding-bottom: 100px;
+    background-color: var(--brand-ivory);
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Breadcrumbs */
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #8C8C8C;
+    margin-bottom: 40px;
+  }
+
+  .breadcrumbs a {
+    text-decoration: none;
+    color: #8C8C8C;
+    transition: color 0.3s ease;
+  }
+
+  .breadcrumbs a:hover {
+    color: var(--brand-vermillion);
+  }
+
+  .breadcrumbs .category-link {
+    text-transform: capitalize;
+  }
+
+  .breadcrumbs .current {
+    color: var(--brand-wine);
+    font-weight: 500;
+  }
+
+  .separator {
+    color: #D1CBC4;
+  }
+
+  /* Grid Layout */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  /* Columna Izquierda: Imagen */
+  .image-column {
+    width: 100%;
+  }
+
+  .image-wrapper {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    aspect-ratio: 1/1;
+    border: 1px solid rgba(232, 75, 16, 0.12); /* Unificado con Categories.astro */
+  }
+
+  .shadow-luxury {
+    box-shadow: 
+      0 25px 50px -12px rgba(92, 26, 42, 0.08), 
+      0 8px 24px -8px rgba(92, 26, 42, 0.04);
+  }
+
+  .badge-new {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--brand-vermillion);
+    color: white;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    z-index: 10;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .image-wrapper:hover .product-image {
+    transform: scale(1.04);
+  }
+
+  /* Columna Derecha: Información */
+  .content-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .category-tag {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--brand-gold);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+
+  .product-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    line-height: 1.1;
+    color: var(--brand-wine);
+    margin-bottom: 15px;
+  }
+
+  .product-price {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--brand-vermillion);
+    margin-bottom: 25px;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, rgba(92, 26, 42, 0.15), transparent);
+    width: 100%;
+    margin-bottom: 25px;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--brand-wine);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .product-description {
+    color: #6E5A4F;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    font-size: 1.05rem;
+    font-weight: 300;
+  }
+
+  /* Lista de características */
+  .product-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .product-features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #5C4D44;
+  }
+
+  .product-features svg {
+    color: var(--brand-gold);
+    flex-shrink: 0;
+  }
+
+  /* Botón WhatsApp */
+  .cta-container {
+    margin-top: 10px;
+  }
+
+  .whatsapp-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Productos Similares */
+  .related-section {
+    margin-top: 80px;
+  }
+
+  .related-section .divider {
+    margin-bottom: 50px;
+    background: linear-gradient(to right, transparent, rgba(92, 26, 42, 0.15), transparent);
+  }
+
+  .related-subtitle {
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--brand-vermillion);
+    margin-bottom: 8px;
+  }
+
+  .related-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    text-align: center;
+    color: var(--brand-wine);
+    margin-bottom: 40px;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+
+  /* Adaptación Móvil */
+  @media (max-width: 960px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    
+    .related-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .product-detail-page {
+      padding-top: 120px;
+    }
+
+    .product-title {
+      font-size: 2.2rem;
+    }
+
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .breadcrumbs {
+      display: none; /* Ocultar en móviles muy pequeños */
+    }
+
+    .whatsapp-btn {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+</style>

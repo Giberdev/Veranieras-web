@@ -1,0 +1,9 @@
+{
+  "id": "p4",
+  "name": "Pulsera 4",
+  "price": 45.0,
+  "category": "pulseras",
+  "description": "Pulsera con diseño único y elegante.",
+  "image": "../../assets/productos/pulsera4.jpg",
+  "isNew": true
+}

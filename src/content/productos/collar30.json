@@ -1,0 +1,9 @@
+{
+  "id": "c30",
+  "name": "Collar 30",
+  "price": 65.0,
+  "category": "collares",
+  "description": "Collar con diseño único y elegante.",
+  "image": "../../assets/productos/collar30.jpg",
+  "isNew": true
+}

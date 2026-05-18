@@ -1,0 +1,123 @@
+---
+// src/components/Footer.astro
+import { Image } from 'astro:assets';
+import Logo from '../assets/veranieras.png';
+---
+
+<footer class="footer bg-brand-wine text-brand-ivory border-t border-brand-wine/10 pt-16 pb-12 font-sans">
+  <div class="container mx-auto px-6 max-w-6xl">
+    
+    <!-- Fila Principal Superior: Grid Responsivo -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      
+      <!-- Columna 1: Logo, eslogan e identidad -->
+      <div class="md:col-span-1 flex flex-col items-start gap-5">
+        <a href="/" class="transition-transform duration-300 hover:scale-105">
+          <Image 
+            src={Logo} 
+            alt="Veranieras Logo" 
+            width={200}
+            class="h-10 w-auto object-contain brightness-0 invert" 
+            format="webp"
+          />
+        </a>
+        <p class="text-brand-ivory/70 text-sm font-light leading-relaxed max-w-xs">
+          Accesorios que se sienten como verano. Diseñados a mano para brillar contigo y llevar un pedacito de sol donde vayas.
+        </p>
+      </div>
+
+      <!-- Columna 2: Navegación Principal -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-brand-gold">Navegación</h3>
+        <ul class="flex flex-col gap-2.5 text-sm font-light">
+          <li><a href="/" class="hover-link">Inicio</a></li>
+          <li><a href="/catalog" class="hover-link">Catálogo Completo</a></li>
+          <li><a href="/about" class="hover-link">Sobre Nosotros</a></li>
+          <li><a href="/faq" class="hover-link">Preguntas Frecuentes</a></li>
+        </ul>
+      </div>
+
+      <!-- Columna 3: Categorías Directas -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-brand-gold">Colecciones</h3>
+        <ul class="flex flex-col gap-2.5 text-sm font-light">
+          <li><a href="/catalog/aretes" class="hover-link">Aretes</a></li>
+          <li><a href="/catalog/collares" class="hover-link">Collares</a></li>
+          <li><a href="/catalog/anillos" class="hover-link">Anillos</a></li>
+          <li><a href="/catalog/pulseras" class="hover-link">Pulseras</a></li>
+          <li><a href="/catalog/personalizacion" class="hover-link">Personalización</a></li>
+        </ul>
+      </div>
+
+      <!-- Columna 4: Suscríbete y Contacto -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-brand-gold">Contacto y Redes</h3>
+        <p class="text-brand-ivory/70 text-sm font-light">¿Tienes alguna pregunta o buscas un diseño especial? Escríbenos.</p>
+        
+        <!-- Iconos sociales con micro-animaciones premium -->
+        <div class="flex items-center gap-4 mt-2">
+          <!-- Instagram -->
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Síguenos en Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <!-- WhatsApp -->
+          <a href="https://wa.me/573127894556" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Escríbenos por WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </a>
+          <!-- Correo -->
+          <a href="mailto:hola@veranieras.com" class="social-icon-btn" aria-label="Envíanos un correo electrónico">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Divisor y Pie de Footer con Copyright -->
+    <div class="border-t border-brand-ivory/10 pt-8 mt-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-light text-brand-ivory/50">
+      <p>&copy; {new Date().getFullYear()} Veranieras. Todos los derechos reservados.</p>
+      <div class="flex gap-6">
+        <a href="/privacidad" class="hover:text-brand-gold transition-colors duration-300">Política de Privacidad</a>
+        <a href="/terminos" class="hover:text-brand-gold transition-colors duration-300">Términos del Servicio</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  /* Enlaces con transiciones fluidas de color y un sutil desplazamiento a la derecha en hover */
+  .hover-link {
+    text-decoration: none;
+    color: rgba(252, 249, 242, 0.7);
+    display: inline-block;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .hover-link:hover {
+    color: var(--brand-gold) !important;
+    transform: translateX(4px);
+  }
+
+  /* Botones sociales circulares premium */
+  .social-icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(252, 249, 242, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(252, 249, 242, 0.8);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(252, 249, 242, 0.08);
+  }
+
+  .social-icon-btn:hover {
+    background-color: var(--brand-gold) !important;
+    color: var(--brand-wine) !important;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    border-color: var(--brand-gold) !important;
+  }
+</style>

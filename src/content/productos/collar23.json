@@ -1,0 +1,9 @@
+{
+  "id": "c23",
+  "name": "Collar 23",
+  "price": 65.0,
+  "category": "collares",
+  "description": "Collar con diseño único y elegante.",
+  "image": "../../assets/productos/collar23.jpg",
+  "isNew": true
+}

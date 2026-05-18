@@ -1,0 +1,51 @@
+---
+// src/components/ui/Button.astro
+interface Props {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'whatsapp';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  className?: string;
+  [key: string]: any; // Para soportar cualquier atributo extra como target, rel, type, id, etc.
+}
+
+const { 
+  variant = 'primary', 
+  size = 'md', 
+  href, 
+  className = '', 
+  ...rest 
+} = Astro.props;
+
+// Clases base para el botón: tipografía de marca (Outfit), transición ultra fluida de 300ms y bordes totalmente redondeados
+const baseClasses = "inline-flex items-center justify-center font-semibold tracking-widest uppercase transition-all duration-300 rounded-full cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none select-none text-center font-sans";
+
+// Mapa de variantes utilizando los tokens de marca registrados de Tailwind v4
+const variantClasses = {
+  primary: "bg-brand-vermillion hover:bg-[#b43406] text-white shadow-md shadow-orange-950/10 focus-visible:ring-brand-vermillion focus-visible:ring-offset-brand-ivory",
+  secondary: "bg-brand-wine hover:bg-[#3d111c] text-white shadow-md shadow-red-950/10 focus-visible:ring-brand-wine focus-visible:ring-offset-brand-ivory",
+  outline: "border-2 border-brand-wine text-brand-wine hover:bg-brand-wine hover:text-white focus-visible:ring-brand-wine focus-visible:ring-offset-brand-ivory",
+  ghost: "text-brand-wine hover:bg-brand-wine/5 hover:text-brand-vermillion focus-visible:ring-brand-wine focus-visible:ring-offset-brand-ivory",
+  whatsapp: "bg-[#25D366] hover:bg-[#20ba56] text-white shadow-md shadow-green-950/10 focus-visible:ring-[#25D366] focus-visible:ring-offset-brand-ivory"
+};
+
+// Mapa de tamaños proporcionados basados en escalas de diseño consistentes
+const sizeClasses = {
+  sm: "px-5 py-2.5 text-[10px] tracking-widest",
+  md: "px-8 py-3.5 text-xs tracking-widest",
+  lg: "px-10 py-4.5 text-sm tracking-widest"
+};
+
+const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
+---
+
+{
+  href ? (
+    <a href={href} class={combinedClasses} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button class={combinedClasses} {...rest}>
+      <slot />
+    </button>
+  )
+}

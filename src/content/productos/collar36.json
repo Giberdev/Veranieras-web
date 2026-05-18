@@ -1,0 +1,9 @@
+{
+  "id": "c36",
+  "name": "Collar 36",
+  "price": 65.0,
+  "category": "collares",
+  "description": "Collar con diseño único y elegante.",
+  "image": "../../assets/productos/collar36.jpg",
+  "isNew": true
+}
