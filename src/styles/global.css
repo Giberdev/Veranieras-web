@@ -11,7 +11,8 @@
   --brand-wine: #5C1A2A;        /* Texto / Botones */
   --brand-vermillion: #E84B10;  /* CTA */
   --brand-gold: #F5C020;        /* Detalles / Iconos */
-  --brand-text: #472612;        /* Texto general */
+  --brand-text: #472612;
+  --brand-footer: #E84B10;
 }
 
 [data-theme="veranieras"] {
@@ -40,6 +41,8 @@
   --color-brand-wine: var(--brand-wine);
   --color-brand-vermillion: var(--brand-vermillion);
   --color-brand-gold: var(--brand-gold);
+  --color-brand-text: var(--brand-text);
+  --color-brand-footer: var(--brand-footer);
 }
 
 body {
