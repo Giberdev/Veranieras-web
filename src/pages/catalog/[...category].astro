@@ -45,6 +45,7 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
       <!-- Filter Bar -->
       <div class="filter-bar-container" transition:name="filter-bar">
         <nav class="filter-bar">
+          <div class="scroll-spacer-start"></div>
           {CATEGORIES.map(cat => (
             <a 
               href={cat.id === 'todas' ? '/catalog' : `/catalog/${cat.id}`} 
@@ -53,6 +54,7 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
               {cat.name}
             </a>
           ))}
+          <div class="scroll-spacer-end"></div>
         </nav>
       </div>
 
@@ -168,6 +170,12 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
     box-shadow: 0 8px 20px rgba(232, 75, 16, 0.25);
   }
 
+  /* Spacers for smooth mobile scrolling boundary */
+  .scroll-spacer-start,
+  .scroll-spacer-end {
+    display: none;
+  }
+
   /* Grid */
   .products-grid {
     display: grid;
@@ -194,6 +202,61 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
 
   @media (max-width: 768px) {
     .main-title { font-size: 2.5rem; }
-    .filter-bar-container { top: 15px; justify-content: flex-start; }
+    
+    .filter-bar-container { 
+      top: 15px; 
+      justify-content: flex-start;
+      padding: 0;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .filter-bar {
+      padding: 8px 12px;
+      gap: 6px;
+      border-radius: 25px; /* Balanced pill style on mobile */
+      
+      /* Premium fading mask at the scroll boundaries */
+      mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+    }
+
+    .filter-btn {
+      padding: 8px 18px; /* Tighter padding for comfortable layout */
+      font-size: 13px; /* Optimized font size for mobile screens */
+    }
+
+    .scroll-spacer-start {
+      display: block;
+      min-width: 8px;
+      height: 1px;
+      flex-shrink: 0;
+    }
+
+    .scroll-spacer-end {
+      display: block;
+      min-width: 16px;
+      height: 1px;
+      flex-shrink: 0;
+    }
   }
 </style>
+
+<script>
+  function scrollActiveBtnIntoView() {
+    const activeBtn = document.querySelector('.filter-btn.active');
+    if (activeBtn) {
+      activeBtn.scrollIntoView({
+        behavior: 'auto',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  }
+
+  // Auto-scroll active category into view on page load
+  scrollActiveBtnIntoView();
+
+  // Re-run after Astro View Transitions swap content
+  document.addEventListener('astro:after-swap', scrollActiveBtnIntoView);
+</script>
