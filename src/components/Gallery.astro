@@ -1,0 +1,664 @@
+---
+// src/components/Gallery.astro
+import { Image } from 'astro:assets';
+
+// Import curated high-quality workspace assets
+import gallery1 from '../assets/gallery/gallery1.jpg';
+import gallery2 from '../assets/gallery/gallery2.jpg';
+import gallery3 from '../assets/gallery/gallery3.jpg';
+import gallery4 from '../assets/gallery/gallery4.jpg';
+import gallery5 from '../assets/gallery/gallery5.jpg';
+import gallery6 from '../assets/gallery/gallery6.jpg';
+import gallery7 from '../assets/gallery/gallery7.jpg';
+import gallery8 from '../assets/gallery/gallery8.jpg';
+import gallery9 from '../assets/gallery/gallery9.jpg';
+
+// Gallery Items definitions matching the expanded 3x6 Bento Grid
+const galleryItems = [
+  {
+    id: 1,
+    title: "MichiBazar",
+    image: gallery1,
+    tag: "Esencia de Verano",
+    bentoClass: "col-start-1 row-start-1 col-span-2 row-span-2 md:col-start-1 md:row-start-1 md:col-span-2 md:row-span-2"
+  },
+  {
+    id: 2,
+    title: "MichiBazar",
+    image: gallery2,
+    tag: "Destellos de Oro",
+    bentoClass: "col-start-3 row-start-1 col-span-1 row-span-2 md:col-start-3 md:row-start-1 md:col-span-1 md:row-span-2"
+  },
+  {
+    id: 3,
+    title: "MichiBazar",
+    image: gallery3,
+    tag: "Brisa de Sal",
+    bentoClass: "col-start-1 row-start-3 col-span-1 row-span-2 md:col-start-1 md:row-start-3 md:col-span-1 md:row-span-2"
+  },
+  {
+    id: 4,
+    title: "Aretes Frutales",
+    image: gallery4,
+    tag: "Detalles Únicos",
+    bentoClass: "col-start-2 row-start-3 col-span-1 row-span-1 md:col-start-2 md:row-start-3 md:col-span-1 md:row-span-1"
+  },
+  {
+    id: 5,
+    title: "Charm Bar",
+    image: gallery5,
+    tag: "Veranieras",
+    bentoClass: "col-start-3 row-start-3 col-span-1 row-span-1 md:col-start-3 md:row-start-3 md:col-span-1 md:row-span-1"
+  },
+  {
+    id: 6,
+    title: "Collares Acuáticos",
+    image: gallery6,
+    tag: "Hecho a Mano",
+    bentoClass: "col-start-2 row-start-4 col-span-2 row-span-2 md:col-start-2 md:row-start-4 md:col-span-2 md:row-span-2"
+  },
+  {
+    id: 7,
+    title: "Aretes veraniegos",
+    image: gallery7,
+    tag: "Piezas Únicas",
+    bentoClass: "col-start-1 row-start-5 col-span-1 row-span-1 md:col-start-1 md:row-start-5 md:col-span-1 md:row-span-1"
+  },
+  {
+    id: 8,
+    title: "Dijes coralinos",
+    image: gallery8,
+    tag: "Diseños únicos",
+    bentoClass: "col-start-1 row-start-6 col-span-2 row-span-1 md:col-start-1 md:row-start-6 md:col-span-2 md:row-span-1"
+  },
+  {
+    id: 9,
+    title: "Collares Atardecer Cálido",
+    image: gallery9,
+    tag: "Reflejo del Sol",
+    bentoClass: "col-start-3 row-start-6 col-span-1 row-span-1 md:col-start-3 md:row-start-6 md:col-span-1 md:row-span-1"
+  }
+];
+---
+
+<section class="gallery-section" id="galeria">
+  <div class="container">
+    
+    <!-- Section Header (Consistent brand guidelines) -->
+    <header class="section-header">
+      <div class="top-decoration">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L13.5 10.5L22 12L13.5 13.5L12 22L10.5 13.5L2 12L10.5 10.5L12 2Z" fill="#F5C020"/>
+        </svg>
+      </div>
+      <span class="subtitle">GALERÍA DE VERANO</span>
+      <h2 class="main-title">Momentos con esencia de <span class="italic-brand font-light text-brand-vermillion">sol</span></h2>
+      <p class="section-desc">
+        Nuestras piezas en el mundo real. Inspiración editorial, atardeceres dorados y brisa de playa.
+      </p>
+    </header>
+
+    <!-- Modern Bento Grid Layout (Based on User's skeleton, expanded to 3 columns and 6 rows) -->
+    <div class="gallery-grid-wrapper">
+      <div class="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-4 m-2 md:m-4" id="galleryGrid">
+        {galleryItems.map((item) => (
+          <div 
+            class={`gallery-item ${item.bentoClass}`} 
+            role="button"
+            tabindex="0"
+            aria-label={`Ver ${item.title}`}
+          >
+            <div class="image-wrapper">
+              <Image 
+                src={item.image} 
+                alt={item.title} 
+                class="gallery-image" 
+                loading="lazy" 
+              />
+              <div class="image-overlay">
+                <span class="overlay-tag italic-brand">{item.tag}</span>
+                <h3 class="overlay-title">{item.title}</h3>
+                <div class="plus-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Luxurious Lightbox Modal Component -->
+<div class="lightbox-modal" id="lightboxModal" aria-hidden="true" role="dialog">
+  <div class="lightbox-backdrop"></div>
+  
+  <button class="lightbox-close" aria-label="Cerrar galería" id="lightboxClose">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  
+  <div class="lightbox-content">
+    <div class="lightbox-image-container">
+      <img src="" alt="" class="lightbox-image" id="lightboxImg" />
+    </div>
+    <div class="lightbox-caption">
+      <span class="lightbox-tag italic-brand" id="lightboxTag"></span>
+      <h3 class="lightbox-title" id="lightboxTitle"></h3>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initGallery() {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const lightbox = document.getElementById('lightboxModal');
+    const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxTag = document.getElementById('lightboxTag');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const backdrop = document.querySelector('.lightbox-backdrop');
+
+    if (lightbox && lightboxImg && lightboxClose) {
+      
+      const openLightbox = (item: HTMLElement) => {
+        const img = item.querySelector('.gallery-image') as HTMLImageElement;
+        const titleEl = item.querySelector('.overlay-title');
+        const tagEl = item.querySelector('.overlay-tag');
+
+        if (img && lightboxImg) {
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt;
+          
+          if (lightboxTitle && titleEl) lightboxTitle.textContent = titleEl.textContent;
+          if (lightboxTag && tagEl) lightboxTag.textContent = tagEl.textContent;
+
+          // Open animations
+          lightbox.classList.add('active');
+          lightbox.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden'; // Lock scrolling
+        }
+      };
+
+      const closeLightbox = () => {
+        lightbox.classList.remove('active');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = ''; // Unlock scrolling
+        
+        // Reset src after transition to avoid flickers next time
+        setTimeout(() => {
+          lightboxImg.src = '';
+        }, 300);
+      };
+
+      // Attach clicks to gallery items
+      galleryItems.forEach(item => {
+        const htmlItem = item as HTMLElement;
+        
+        // Clean up previous event listener to avoid duplicate bindings
+        const newHtmlItem = htmlItem.cloneNode(true) as HTMLElement;
+        htmlItem.parentNode?.replaceChild(newHtmlItem, htmlItem);
+        
+        // Click action
+        newHtmlItem.addEventListener('click', () => openLightbox(newHtmlItem));
+        
+        // Keyboard accessibility
+        newHtmlItem.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openLightbox(newHtmlItem);
+          }
+        });
+      });
+
+      // Close actions
+      lightboxClose.addEventListener('click', closeLightbox);
+      backdrop?.addEventListener('click', closeLightbox);
+
+      // Close with ESC key
+      document.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+          closeLightbox();
+        }
+      });
+    }
+  }
+
+  // Handle initial page load and Astro view transitions
+  initGallery();
+  document.addEventListener('astro:page-load', initGallery);
+</script>
+
+<style>
+  /* Base Easing Curve: Premium Design Engineering Craft */
+  :root {
+    --ease-premium: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .gallery-section {
+    padding: 100px 20px;
+    background-color: var(--brand-ivory);
+    font-family: 'Outfit', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Section Header (Cohesive matching Categories & FAQ) */
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .top-decoration { 
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px; 
+  }
+
+  .top-decoration :global(svg) {
+    fill: var(--brand-gold) !important;
+  }
+
+  .subtitle {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--brand-vermillion) !important;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .main-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    margin-bottom: 18px;
+    color: var(--brand-wine);
+    line-height: 1.1;
+  }
+
+  .italic-brand { 
+    font-style: italic; 
+    color: var(--brand-vermillion) !important; 
+  }
+
+  .section-desc {
+    color: #8C8C8C;
+    font-size: 1.1rem;
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* Bento Grid Wrapper dimensions */
+  .gallery-grid-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Strict row heights for the Bento Grid layout to fit perfectly */
+  #galleryGrid {
+    grid-auto-rows: 150px;
+  }
+
+  @media (min-width: 768px) {
+    #galleryGrid {
+      grid-auto-rows: 200px;
+    }
+  }
+
+  /* Individual Bento Cards Container */
+  .gallery-item {
+    cursor: pointer;
+    outline: none;
+    height: 100%;
+    display: flex;
+  }
+
+  /* Inner Image & Hover Card container */
+  .image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    border: 1px solid rgba(232, 75, 16, 0.08);
+    box-shadow: 0 15px 35px -15px rgba(92, 26, 42, 0.03);
+    background: var(--brand-petal);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    transition: 
+      border-color 300ms ease,
+      box-shadow 300ms var(--ease-premium),
+      transform 300ms var(--ease-premium);
+  }
+
+  .gallery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 600ms var(--ease-premium);
+  }
+
+  /* Image overlay (Editorial Cover look) */
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(250, 214, 137, 0.658) 0%, rgba(250, 198, 163, 0.3) 50%, rgba(92, 26, 42, 0) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .image-overlay {
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 300ms ease;
+    }
+  }
+
+  .overlay-tag {
+    font-size: 1rem;
+    color: var(--brand-gold);
+    margin-bottom: 2px;
+    transform: translateY(10px);
+    transition: transform 300ms var(--ease-premium);
+  }
+
+  @media (max-width: 767px) {
+    .overlay-tag {
+      transform: translateY(0);
+      font-size: 0.85rem;
+    }
+  }
+
+  .overlay-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--brand-text);
+    margin: 0;
+    line-height: 1.2;
+    transform: translateY(10px);
+    transition: transform 300ms var(--ease-premium) 30ms;
+  }
+
+  @media (min-width: 768px) {
+    .overlay-title {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .overlay-title {
+      transform: translateY(0);
+      font-size: 0.95rem;
+    }
+  }
+
+  .plus-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transform: scale(0.9);
+    transition: 
+      opacity 250ms ease, 
+      transform 250ms var(--ease-premium),
+      background-color 200ms ease;
+  }
+
+  @media (min-width: 768px) {
+    .plus-icon {
+      top: 20px;
+      right: 20px;
+      width: 38px;
+      height: 38px;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+  }
+
+  /* Interaction and Hover animations */
+  @media (hover: hover) and (pointer: fine) {
+    .gallery-item:hover .image-wrapper {
+      border-color: rgba(232, 75, 16, 0.25);
+      box-shadow: 0 25px 50px -15px rgba(232, 75, 16, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .gallery-item:hover .gallery-image {
+      transform: scale(1.04);
+    }
+
+    .gallery-item:hover .image-overlay {
+      opacity: 1;
+    }
+
+    .gallery-item:hover .overlay-tag,
+    .gallery-item:hover .overlay-title {
+      transform: translateY(0);
+    }
+
+    .gallery-item:hover .plus-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .plus-icon:hover {
+      background: var(--brand-vermillion);
+    }
+  }
+
+  /* Accessible focus styling */
+  .gallery-item:focus-visible .image-wrapper {
+    border-color: var(--brand-vermillion);
+    box-shadow: 0 0 0 4px rgba(232, 75, 16, 0.25);
+    outline: none;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-section {
+      padding: 60px 15px;
+    }
+
+    .main-title {
+      font-size: 2.8rem;
+    }
+
+    .image-overlay {
+      background: linear-gradient(to top, rgba(92, 26, 42, 0.75) 0%, rgba(92, 26, 42, 0.1) 70%);
+    }
+
+    .plus-icon {
+      background: rgba(92, 26, 42, 0.5);
+    }
+  }
+
+  /* Luxurious Lightbox Modal Styling */
+  .lightbox-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms var(--ease-premium);
+  }
+
+  .lightbox-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(71, 38, 18, 0.65); /* Warm dark summer shadow tint */
+    backdrop-filter: blur(16px) saturate(120%);
+    z-index: 1;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: 
+      background-color 200ms ease, 
+      transform 200ms var(--ease-premium), 
+      color 200ms ease;
+  }
+
+  .lightbox-close:active {
+    transform: scale(0.94);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .lightbox-close:hover {
+      background: #FFFFFF;
+      color: var(--brand-wine);
+      transform: rotate(90deg) scale(1.05);
+    }
+  }
+
+  .lightbox-content {
+    position: relative;
+    z-index: 5;
+    max-width: 90%;
+    max-height: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .lightbox-image-container {
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 70vh;
+  }
+
+  .lightbox-image {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    display: block;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: 
+      transform 350ms var(--ease-ios),
+      opacity 300ms ease;
+  }
+
+  .lightbox-modal.active .lightbox-image {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  /* Captions inside Lightbox */
+  .lightbox-caption {
+    text-align: center;
+    color: #FFFFFF;
+    max-width: 600px;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: 
+      transform 350ms var(--ease-ios) 100ms,
+      opacity 300ms ease 100ms;
+  }
+
+  .lightbox-modal.active .lightbox-caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .lightbox-tag {
+    font-size: 1.4rem;
+    color: var(--brand-gold);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .lightbox-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 768px) {
+    .lightbox-close {
+      top: 20px;
+      right: 20px;
+      width: 42px;
+      height: 42px;
+    }
+    
+    .lightbox-content {
+      max-width: 95%;
+    }
+
+    .lightbox-image-container {
+      max-height: 60vh;
+    }
+
+    .lightbox-image {
+      max-height: 60vh;
+    }
+
+    .lightbox-title {
+      font-size: 1.25rem;
+    }
+
+    .lightbox-tag {
+      font-size: 1.1rem;
+    }
+  }
+</style>
