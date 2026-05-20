@@ -40,42 +40,42 @@ import Button from './ui/Button.astro';
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
       </svg>
     </Button>
-  </div>
-
-  <!-- Fila de beneficios inferior Centrada -->
-  <div class="absolute bottom-12 left-6 md:left-20 right-6 md:right-20 hidden md:flex justify-start gap-16 border-neutral-300/50 z-20">
     
-    <!-- Inspiradas en el Mar -->
-    <div class="flex flex-col items-center text-center gap-3">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-        <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-        <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-      </svg>
-      <span class="text-[9px] uppercase tracking-widest font-bold text-neutral-800">Inspiradas en el Mar</span>
-    </div>
+    <!-- Fila de beneficios inferior en formato Pills de Cristal con Alto Contraste -->
+    <!-- Integrada en el flujo para evitar superposiciones y visible en móviles -->
+    <div class="mt-10 md:mt-14 w-full flex flex-wrap justify-start gap-3 md:gap-5 z-20 benefits-container">
+      
+      <!-- Inspiradas en el Mar -->
+      <div class="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-5 md:py-2.5 rounded-full bg-white/70 backdrop-blur-md border border-white/50 shadow-sm transition-all duration-300 hover:bg-white/90 hover:scale-102">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+          <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+          <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+        </svg>
+        <span class="text-[9px] md:text-[10px] uppercase tracking-wider font-bold text-neutral-900 font-sans">Inspiradas en el Mar</span>
+      </div>
 
-    <!-- Hechas a Mano -->
-    <div class="flex flex-col items-center text-center gap-3">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
-        <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
-        <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
-        <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
-      </svg>
-      <span class="text-[9px] uppercase tracking-widest font-bold text-neutral-800">Hechas a Mano</span>
-    </div>
+      <!-- Hechas a Mano -->
+      <div class="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-5 md:py-2.5 rounded-full bg-white/70 backdrop-blur-md border border-white/50 shadow-sm transition-all duration-300 hover:bg-white/90 hover:scale-102">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
+          <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
+          <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
+          <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+        </svg>
+        <span class="text-[9px] md:text-[10px] uppercase tracking-wider font-bold text-neutral-900 font-sans">Hechas a Mano</span>
+      </div>
 
-    <!-- Materiales de Calidad -->
-    <div class="flex flex-col items-center text-center gap-3">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 3h12l4 6-10 12L2 9z"/>
-        <path d="M11 3 8 9l4 12 4-12-3-6"/>
-        <path d="M2 9h20"/>
-      </svg>
-      <span class="text-[9px] uppercase tracking-widest font-bold text-neutral-800">Materiales de Calidad</span>
+      <!-- Materiales de Calidad -->
+      <div class="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-5 md:py-2.5 rounded-full bg-white/70 backdrop-blur-md border border-white/50 shadow-sm transition-all duration-300 hover:bg-white/90 hover:scale-102">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12l4 6-10 12L2 9z"/>
+          <path d="M11 3 8 9l4 12 4-12-3-6"/>
+          <path d="M2 9h20"/>
+        </svg>
+        <span class="text-[9px] md:text-[10px] uppercase tracking-wider font-bold text-neutral-900 font-sans">Materiales de Calidad</span>
+      </div>
     </div>
-
   </div>
 </section>
 
@@ -85,5 +85,24 @@ import Button from './ui/Button.astro';
   }
   span, p, button {
     font-family: 'Outfit', sans-serif;
+  }
+  @media (max-height: 850px) {
+    .hero-content {
+      padding-top: 3rem !important; /* pt-12 */
+    }
+    .hero-content h1 {
+      font-size: 4rem !important; /* text-6xl */
+      line-height: 1 !important;
+      margin-bottom: 1rem !important;
+    }
+    .hero-content p {
+      margin-bottom: 1.5rem !important;
+    }
+    .hero-content .divider {
+      margin-bottom: 1rem !important;
+    }
+    .benefits-container {
+      margin-top: 2rem !important;
+    }
   }
 </style>
