@@ -3,32 +3,35 @@
 import MainLayout from "../../layouts/MainLayout.astro";
 import ProductCard from "../../components/ProductCard.astro";
 import { CATEGORIES } from "../../data/products";
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from "astro:content";
 
 export async function getStaticPaths() {
   return [
     { params: { category: undefined } }, // Para /catalog
-    { params: { category: 'todas' } },   // Alias opcional
-    { params: { category: 'aretes' } },
-    { params: { category: 'collares' } },
-    { params: { category: 'anillos' } },
-    { params: { category: 'pulseras' } },
-    { params: { category: 'personalizacion' } }
+    { params: { category: "todas" } }, // Alias opcional
+    { params: { category: "aretes" } },
+    { params: { category: "collares" } },
+    { params: { category: "anillos" } },
+    { params: { category: "pulseras" } },
   ];
 }
 
 const { category } = Astro.params;
-const categoryParam = category && category !== 'todas' ? category : 'todas';
+const categoryParam = category && category !== "todas" ? category : "todas";
 
 // Obtener los productos de la colección
-const allProducts = await getCollection('productos');
+const allProducts = await getCollection("productos");
 
 // Filter products based on the category
-const filteredProducts = categoryParam === "todas" 
-  ? allProducts 
-  : allProducts.filter((p: CollectionEntry<'productos'>) => p.data.category === categoryParam);
+const filteredProducts =
+  categoryParam === "todas"
+    ? allProducts
+    : allProducts.filter(
+        (p: CollectionEntry<"productos">) => p.data.category === categoryParam
+      );
 
-const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name || "Catálogo";
+const currentCategoryName =
+  CATEGORIES.find((c) => c.id === categoryParam)?.name || "Catálogo";
 ---
 
 <MainLayout title={`Catálogo | ${currentCategoryName}`}>
@@ -37,7 +40,9 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
       <div class="container">
         <h1 class="main-title">{currentCategoryName}</h1>
         <span class="subtitle">EXPLORA NUESTRAS JOYAS</span>
-        <p class="description">Piezas únicas diseñadas para resaltar tu belleza natural.</p>
+        <p class="description">
+          Piezas únicas diseñadas para resaltar tu belleza natural.
+        </p>
       </div>
     </header>
 
@@ -46,30 +51,42 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
       <div class="filter-bar-container" transition:name="filter-bar">
         <nav class="filter-bar">
           <div class="scroll-spacer-start"></div>
-          {CATEGORIES.map(cat => (
-            <a 
-              href={cat.id === 'todas' ? '/catalog' : `/catalog/${cat.id}`} 
-              class={`filter-btn ${categoryParam === cat.id ? 'active' : ''}`}
-            >
-              {cat.name}
-            </a>
-          ))}
+          {
+            CATEGORIES.map((cat) => (
+              <a
+                href={cat.id === "todas" ? "/catalog" : `/catalog/${cat.id}`}
+                class={`filter-btn ${categoryParam === cat.id ? "active" : ""}`}
+              >
+                {cat.name}
+              </a>
+            ))
+          }
           <div class="scroll-spacer-end"></div>
         </nav>
       </div>
 
       <!-- Products Grid -->
       <div class="products-grid" transition:animate="slide">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product: CollectionEntry<'productos'>, index) => (
-            <ProductCard product={product.data} slug={product.id} eager={index < 4} />
-          ))
-        ) : (
-          <div class="no-products">
-            <p>Próximamente tendremos más piezas en esta categoría.</p>
-            <a href="/catalog" class="back-btn">Ver todo el catálogo</a>
-          </div>
-        )}
+        {
+          filteredProducts.length > 0 ? (
+            filteredProducts.map(
+              (product, index) => (
+                <ProductCard
+                  product={product.data}
+                  slug={product.id}
+                  eager={index < 4}
+                />
+              )
+            )
+          ) : (
+            <div class="no-products">
+              <p>Próximamente tendremos más piezas en esta categoría.</p>
+              <a href="/catalog" class="back-btn">
+                Ver todo el catálogo
+              </a>
+            </div>
+          )
+        }
       </div>
     </div>
   </div>
@@ -79,7 +96,7 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
   .catalog-page {
     background-color: var(--brand-ivory);
     min-height: 100vh;
-    font-family: 'Outfit', sans-serif;
+    font-family: "Outfit", sans-serif;
   }
 
   .container {
@@ -92,7 +109,11 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
     text-align: center;
     padding-top: 140px; /* Espacio para el navbar absoluto flotante */
     padding-bottom: 60px;
-    background: linear-gradient(to bottom, var(--brand-ivory), rgba(252, 249, 242, 0.4));
+    background: linear-gradient(
+      to bottom,
+      var(--brand-ivory),
+      rgba(252, 249, 242, 0.4)
+    );
   }
 
   .subtitle {
@@ -105,14 +126,14 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
   }
 
   .main-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: "Cormorant Garamond", serif;
     font-size: 3.5rem;
-    color: #2D2D2D;
+    color: #2d2d2d;
     margin-bottom: 15px;
   }
 
   .description {
-    color: #8C8C8C;
+    color: #8c8c8c;
     max-width: 600px;
     margin: 0 auto;
     font-size: 1.1rem;
@@ -132,10 +153,11 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
   .filter-bar {
     display: flex;
     gap: 8px;
-    background: #FFFFFF;
+    background: #ffffff;
     padding: 8px;
     border-radius: 50px;
-    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.05), 0 5px 15px -5px rgba(232, 75, 16, 0.05);
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.05),
+      0 5px 15px -5px rgba(232, 75, 16, 0.05);
     border: 1px solid rgba(232, 75, 16, 0.1);
     max-width: 100%;
     overflow-x: auto;
@@ -188,7 +210,7 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
     grid-column: 1 / -1;
     text-align: center;
     padding: 100px 0;
-    color: #8C8C8C;
+    color: #8c8c8c;
   }
 
   .back-btn {
@@ -201,10 +223,12 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
   }
 
   @media (max-width: 768px) {
-    .main-title { font-size: 2.5rem; }
-    
-    .filter-bar-container { 
-      top: 15px; 
+    .main-title {
+      font-size: 2.5rem;
+    }
+
+    .filter-bar-container {
+      top: 15px;
       justify-content: flex-start;
       padding: 0;
       margin-left: -10px;
@@ -215,10 +239,22 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
       padding: 8px 12px;
       gap: 6px;
       border-radius: 25px; /* Balanced pill style on mobile */
-      
+
       /* Premium fading mask at the scroll boundaries */
-      mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
-      -webkit-mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+      mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 16px,
+        black calc(100% - 16px),
+        transparent
+      );
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 16px,
+        black calc(100% - 16px),
+        transparent
+      );
     }
 
     .filter-btn {
@@ -244,12 +280,12 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
 
 <script>
   function scrollActiveBtnIntoView() {
-    const activeBtn = document.querySelector('.filter-btn.active');
+    const activeBtn = document.querySelector(".filter-btn.active");
     if (activeBtn) {
       activeBtn.scrollIntoView({
-        behavior: 'auto',
-        block: 'nearest',
-        inline: 'center'
+        behavior: "auto",
+        block: "nearest",
+        inline: "center",
       });
     }
   }
@@ -258,5 +294,5 @@ const currentCategoryName = CATEGORIES.find(c => c.id === categoryParam)?.name |
   scrollActiveBtnIntoView();
 
   // Re-run after Astro View Transitions swap content
-  document.addEventListener('astro:after-swap', scrollActiveBtnIntoView);
+  document.addEventListener("astro:after-swap", scrollActiveBtnIntoView);
 </script>

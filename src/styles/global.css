@@ -1,29 +1,37 @@
 @import "tailwindcss";
+
 @plugin "daisyui" {
   themes: veranieras;
 }
 
 :root {
   /* Marca Principal */
-  --brand-ivory: #FCF9F2;       /* Fondo principal */
-  --brand-petal: #F7E7E8;       /* Neutro/Tarjetas */
-  --brand-crimson: #CC1F4A;     /* Títulos */
-  --brand-wine: #5C1A2A;        /* Texto / Botones */
-  --brand-vermillion: #E84B10;  /* CTA */
-  --brand-gold: #F5C020;        /* Detalles / Iconos */
+  --brand-ivory: #FCF9F2;
+  /* Fondo principal */
+  --brand-petal: #F7E7E8;
+  /* Neutro/Tarjetas */
+  --brand-crimson: #CC1F4A;
+  /* Títulos */
+  --brand-wine: #5C1A2A;
+  /* Texto / Botones */
+  --brand-vermillion: #E84B10;
+  /* CTA */
+  --brand-gold: #F5C020;
+  /* Detalles / Iconos */
   --brand-text: #472612;
   --brand-footer: #E84B10;
 }
 
 [data-theme="veranieras"] {
-  --color-base-100: #FCF9F2;    /* Corresponde a brand-ivory */
+  --color-base-100: #FCF9F2;
+  /* Corresponde a brand-ivory */
   --color-primary: #CC1F4A;
   --color-primary-content: #ffffff;
   --color-secondary: #F5C020;
   --color-accent: #E84B10;
   --color-neutral: #5C1A2A;
   --color-neutral-content: #ffffff;
-  
+
   /* Ajustes estéticos */
   --rounded-box: 1.5rem;
   --rounded-btn: 0.3rem;
@@ -50,6 +58,12 @@ body {
   color: var(--brand-text);
   font-family: 'Outfit', sans-serif;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 .italic-brand {

@@ -1,59 +1,190 @@
 ---
-import { Image } from 'astro:assets';
-import Logo from '../assets/veranieras.png'
+import { Image } from "astro:assets";
+import Logo from "../assets/veranieras.png";
+
+const pathname = Astro.url.pathname;
+const isCurrent = (path: string) => {
+  if (path === '/') {
+    return pathname === '/' || pathname === '';
+  }
+  const normalizedPath = pathname.endsWith('/') && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
+  return normalizedPath === path || normalizedPath.startsWith(path + '/');
+};
 ---
 
-<div class="navbar bg-transparent absolute top-0 left-0 w-full z-50 px-2 sm:px-4 text-[#472612]">
-  <div class="navbar-start">
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> 
-        </svg>
+<header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-4 px-4 sm:px-6 md:px-8 text-[#472612]">
+  <div class="navbar bg-transparent max-w-7xl mx-auto rounded-full transition-all duration-500 px-4 md:px-6">
+    
+    <!-- Left Section: Mobile Hamburger Trigger + Desktop Logo -->
+    <div class="navbar-start">
+      <!-- Mobile Dropdown Menu -->
+      <div class="dropdown">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle lg:hidden text-[#472612] hover:bg-brand-vermillion/10 hover:text-brand-vermillion transition-all duration-300" aria-label="Menú de navegación">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+          </svg>
+        </div>
+        <ul tabindex="-1" class="menu menu-sm dropdown-content mt-3 z-50 p-3 shadow-xl bg-[#FCF9F2] rounded-2xl w-56 border border-[#E8DCCB] text-[#472612] gap-1 font-medium">
+          <li>
+            <a href="/" class={`hover:text-brand-vermillion active:bg-brand-vermillion/10 transition-colors ${isCurrent('/') ? 'text-brand-vermillion font-semibold' : ''}`}>
+              Inicio
+            </a>
+          </li>
+          <li>
+            <a href="/catalog" class={`hover:text-brand-vermillion active:bg-brand-vermillion/10 transition-colors ${isCurrent('/catalog') ? 'text-brand-vermillion font-semibold' : ''}`}>
+              Catálogo
+            </a>
+          </li>
+          <li>
+            <a href="/personalizacion" class={`hover:text-brand-vermillion active:bg-brand-vermillion/10 transition-colors ${isCurrent('/personalizacion') ? 'text-brand-vermillion font-semibold' : ''}`}>
+              Personalización
+            </a>
+          </li>
+          <li>
+            <a href="/#galeria" class="hover:text-brand-vermillion active:bg-brand-vermillion/10 transition-colors">
+              Galería
+            </a>
+          </li>
+          <li>
+            <a href="/#faq" class="hover:text-brand-vermillion active:bg-brand-vermillion/10 transition-colors">
+              FAQ
+            </a>
+          </li>
+        </ul>
       </div>
-      <ul
-        tabindex="-1"
-        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-base-content">
-        <li><a href="/">Inicio</a></li>
-        <li><a href="/catalog">Catálogo</a></li>
-        <li><a href="/about">Sobre Nosotros</a></li>
-        <li><a href="/faq">FAQ</a></li>
-      </ul>
-    </div>
-  </div>
-  
-  <div class="navbar-center">
-    <a href="/" class="flex items-center justify-center py-4">
-        <Image 
-          src={Logo} 
-          alt="Veranieras" 
-          width={400} 
-          class="h-18 sm:h-14 w-auto object-contain"
+      
+      <!-- Desktop Logo (Hidden on mobile) -->
+      <a href="/" class="hidden lg:flex items-center transition-transform duration-300 hover:scale-102">
+        <Image
+          src={Logo}
+          alt="Veranieras"
+          width={350}
+          class="h-10 w-auto object-contain"
           format="webp"
           quality="high"
         />
-    </a>
-  </div>
-  
-  <div class="navbar-end">
-    <button class="btn btn-ghost btn-circle">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> 
-      </svg>
-    </button>
-    <button class="btn btn-ghost btn-circle">
-      <div class="indicator">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> 
-        </svg>
-        <span class="badge badge-xs bg-brand-vermillion border-none indicator-item"></span>
+      </a>
+    </div>
+
+    <!-- Center Section: Mobile Logo + Desktop Nav Links -->
+    <div class="navbar-center">
+      <!-- Mobile Logo (Centered on mobile, hidden on desktop) -->
+      <a href="/" class="lg:hidden flex items-center transition-transform duration-300 hover:scale-102">
+        <Image
+          src={Logo}
+          alt="Veranieras"
+          width={300}
+          class="h-9 w-auto object-contain"
+          format="webp"
+          quality="high"
+        />
+      </a>
+
+      <!-- Desktop Links (Hidden on mobile) -->
+      <div class="hidden lg:flex">
+        <ul class="menu menu-horizontal px-1 gap-1 text-[13px] uppercase tracking-[0.18em] font-semibold">
+          <li>
+            <a href="/" class={`hover:text-brand-vermillion bg-transparent focus:bg-transparent active:bg-transparent relative py-2 px-3 after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-brand-vermillion after:transition-all after:duration-300 ${isCurrent('/') ? 'text-brand-vermillion after:w-2/3' : 'text-[#472612] after:w-0 hover:after:w-2/3'}`}>
+              Inicio
+            </a>
+          </li>
+          <li>
+            <a href="/catalog" class={`hover:text-brand-vermillion bg-transparent focus:bg-transparent active:bg-transparent relative py-2 px-3 after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-brand-vermillion after:transition-all after:duration-300 ${isCurrent('/catalog') ? 'text-brand-vermillion after:w-2/3' : 'text-[#472612] after:w-0 hover:after:w-2/3'}`}>
+              Catálogo
+            </a>
+          </li>
+          <li>
+            <a href="/personalizacion" class={`hover:text-brand-vermillion bg-transparent focus:bg-transparent active:bg-transparent relative py-2 px-3 after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-brand-vermillion after:transition-all after:duration-300 ${isCurrent('/personalizacion') ? 'text-brand-vermillion after:w-2/3' : 'text-[#472612] after:w-0 hover:after:w-2/3'}`}>
+              Personalización
+            </a>
+          </li>
+          <li>
+            <a href="/#galeria" class="hover:text-brand-vermillion bg-transparent focus:bg-transparent active:bg-transparent relative py-2 px-3 after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-brand-vermillion after:transition-all after:duration-300 text-[#472612] after:w-0 hover:after:w-2/3">
+              Galería
+            </a>
+          </li>
+          <li>
+            <a href="/#faq" class="hover:text-brand-vermillion bg-transparent focus:bg-transparent active:bg-transparent relative py-2 px-3 after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-brand-vermillion after:transition-all after:duration-300 text-[#472612] after:w-0 hover:after:w-2/3">
+              FAQ
+            </a>
+          </li>
+        </ul>
       </div>
-    </button>
+    </div>
+
+    <!-- Right Section: Utilities Buttons -->
+    <div class="navbar-end gap-1.5">
+      <!-- Search Button -->
+      <button class="btn btn-ghost btn-circle text-[#472612] hover:bg-brand-vermillion/10 hover:text-brand-vermillion transition-all duration-300" aria-label="Buscar productos">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </button>
+      
+      <!-- Cart/Notifications Button -->
+      <button class="btn btn-ghost btn-circle text-[#472612] hover:bg-brand-vermillion/10 hover:text-brand-vermillion transition-all duration-300 relative" aria-label="Ver notificaciones">
+        <div class="indicator">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span class="badge badge-xs bg-brand-vermillion border-none indicator-item"></span>
+        </div>
+      </button>
+    </div>
   </div>
-</div>
+</header>
+
+<script>
+  function initNavbar() {
+    const header = document.getElementById('main-header');
+    const navbar = header?.querySelector('.navbar');
+    
+    const handleScroll = () => {
+      if (window.scrollY > 30) {
+        header?.classList.remove('py-4', 'px-4', 'sm:px-6', 'md:px-8');
+        header?.classList.add('py-2', 'px-2', 'sm:px-4', 'md:px-6');
+        navbar?.classList.remove('bg-transparent');
+        navbar?.classList.add(
+          'bg-[#FCF9F2]/90', 
+          'backdrop-blur-md', 
+          'shadow-lg', 
+          'border', 
+          'border-[#E8DCCB]/50'
+        );
+      } else {
+        header?.classList.remove('py-2', 'px-2', 'sm:px-4', 'md:px-6');
+        header?.classList.add('py-4', 'px-4', 'sm:px-6', 'md:px-8');
+        navbar?.classList.remove(
+          'bg-[#FCF9F2]/90', 
+          'backdrop-blur-md', 
+          'shadow-lg', 
+          'border', 
+          'border-[#E8DCCB]/50'
+        );
+        navbar?.classList.add('bg-transparent');
+      }
+    };
+    
+    // Add scroll listener safely
+    window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    // Initial call in case page is refreshed while already scrolled
+    handleScroll();
+  }
+
+  // Initialize on first load and view transitions
+  initNavbar();
+  document.addEventListener('astro:page-load', initNavbar);
+</script>
 
 <style>
-  div, ul, a, button {
-    font-family: 'Outfit', sans-serif;
+  /* Typography fallback integration */
+  header,
+  .navbar,
+  .menu,
+  .dropdown-content,
+  a,
+  button {
+    font-family: "Outfit", sans-serif;
   }
 </style>

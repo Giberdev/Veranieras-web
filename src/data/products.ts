@@ -75,6 +75,5 @@ export const CATEGORIES = [
   { id: 'aretes', name: 'Aretes' },
   { id: 'collares', name: 'Collares' },
   { id: 'anillos', name: 'Anillos' },
-  { id: 'pulseras', name: 'Pulseras' },
-  { id: 'personalizacion', name: 'Personalización' }
+  { id: 'pulseras', name: 'Pulseras' }
 ];
