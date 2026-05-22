@@ -1,9 +1,0 @@
-{
-  "id": "c20",
-  "name": "Collar 20",
-  "price": 65.0,
-  "category": "collares",
-  "description": "Collar con diseño único y elegante.",
-  "image": "../../assets/productos/collar20.jpg",
-  "isNew": true
-}

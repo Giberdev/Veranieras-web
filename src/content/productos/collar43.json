@@ -1,0 +1,9 @@
+{
+  "id": "c43",
+  "name": "Collar 43",
+  "price": 45.0,
+  "category": "collares",
+  "description": "Collar con diseño único y elegante.",
+  "image": "../../assets/productos/collar43.jpg",
+  "isNew": true
+}
