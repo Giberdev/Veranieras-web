@@ -1,16 +1,17 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import Navbar from "../components/Navbar.astro";
-import Footer from "../components/Footer.astro";
 
-// Get all images statically so Astro/Vite bundles them
+
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/productos/*.{jpeg,jpg,png}",
   { eager: true }
 );
 
 function getImageUrl(filename: string) {
-  const match = Object.keys(images).find((key) => key.includes(filename));
+  const match = Object.keys(images).find((key) => {
+    const parts = key.split("/");
+    return parts[parts.length - 1] === filename;
+  });
   return match ? images[match].default.src : "";
 }
 
@@ -34,15 +35,14 @@ const categoryBases = {
 };
 
 const dijes = [
-  { url: getImageUrl("dije_corazon_oro"), name: "Corazón de Oro" },
-  { url: getImageUrl("dije_estrella_plata"), name: "Estrella de Plata" },
-  { url: getImageUrl("dije_mariposa_oro"), name: "Mariposa de Oro" },
+  { url: getImageUrl("dije_corazon_oro.jpg"), name: "Corazón de Oro" },
+  { url: getImageUrl("dije_estrella_plata.jpg"), name: "Estrella de Plata" },
+  { url: getImageUrl("dije_mariposa_oro.jpg"), name: "Mariposa de Oro" },
 ];
 ---
 
 <MainLayout title="Personalización | Veranieras">
   <main class="custom-page">
-    <!-- Page Header -->
     <header class="custom-header">
       <div class="header-star">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -59,7 +59,7 @@ const dijes = [
       </p>
     </header>
 
-    <!-- Customizer -->
+
     <section class="customizer-section">
       <div
         class="customizer"
@@ -67,9 +67,8 @@ const dijes = [
         data-bases={JSON.stringify(categoryBases)}
         data-dijes={JSON.stringify(dijes)}
       >
-        <!-- Left: Controls -->
+
         <div class="customizer__controls">
-          <!-- Step Progress -->
           <div class="progress-track">
             <div class="progress-line">
               <div class="progress-fill" id="progress-fill"></div>
@@ -88,9 +87,8 @@ const dijes = [
             </div>
           </div>
 
-          <!-- Step Panels -->
+
           <div class="steps-container">
-            <!-- Step 1: Category -->
             <div id="step-1" class="step-panel is-visible">
               <h2 class="step-title">¿Qué joya deseas personalizar?</h2>
               <div class="cat-grid">
@@ -160,7 +158,6 @@ const dijes = [
               </div>
             </div>
 
-            <!-- Step 2: Base Selection -->
             <div id="step-2" class="step-panel">
               <div class="step-top-row">
                 <button id="back-to-1" class="back-btn">
@@ -180,11 +177,11 @@ const dijes = [
                 <h2 class="step-title">Elige la base</h2>
               </div>
               <div class="bases-row" id="bases-carousel">
-                <!-- Populated by JS -->
+
               </div>
             </div>
 
-            <!-- Step 3: Charm Selection -->
+
             <div id="step-3" class="step-panel">
               <div class="step-top-row">
                 <button id="back-to-2" class="back-btn">
@@ -204,7 +201,6 @@ const dijes = [
                 <h2 class="step-title">Añade un dije</h2>
               </div>
               <div class="charms-grid" id="charms-grid">
-                <!-- Populated by JS -->
               </div>
               <button id="finish-btn" class="cta-btn" disabled>
                 <span>Ver Resultado Final</span>
@@ -222,7 +218,6 @@ const dijes = [
               </button>
             </div>
 
-            <!-- Result -->
             <div id="step-result" class="step-panel">
               <div class="result-content">
                 <div class="result-check">
@@ -272,16 +267,14 @@ const dijes = [
           </div>
         </div>
 
-        <!-- Right: Preview -->
+
         <div class="customizer__preview">
           <div class="preview-canvas" id="preview-area">
-            <!-- Decorative corners -->
             <div class="corner corner--tl"></div>
             <div class="corner corner--tr"></div>
             <div class="corner corner--bl"></div>
             <div class="corner corner--br"></div>
 
-            <!-- Empty State -->
             <div id="empty-state" class="preview-empty">
               <svg
                 width="48"
@@ -300,7 +293,6 @@ const dijes = [
               <p>Tu diseño aparecerá aquí</p>
             </div>
 
-            <!-- Base image -->
             <img
               id="preview-base"
               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
@@ -308,7 +300,6 @@ const dijes = [
               class="preview-base-img"
             />
 
-            <!-- Charm overlay -->
             <div id="preview-charm-container" class="preview-charm-wrap">
               <img
                 id="preview-charm"
@@ -318,7 +309,6 @@ const dijes = [
               />
             </div>
 
-            <!-- Pedestal shadow -->
             <div class="pedestal-shadow"></div>
           </div>
         </div>
@@ -327,267 +317,9 @@ const dijes = [
   </main>
 </MainLayout>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById("customizer-container");
-    if (!container) return;
-
-    const categoryBases: Record<string, string[]> = JSON.parse(
-      container.dataset.bases || "{}"
-    );
-    const dijes: Array<{ url: string; name: string }> = JSON.parse(
-      container.dataset.dijes || "[]"
-    );
-
-    // State
-    let state: {
-      step: number;
-      category: string | null;
-      base: string | null;
-      charm: { url: string; name: string } | null;
-    } = { step: 1, category: null, base: null, charm: null };
-
-    // Safe DOM queries — bail out entirely if any critical element is missing
-    const stepEls = [
-      document.getElementById("step-1"),
-      document.getElementById("step-2"),
-      document.getElementById("step-3"),
-      document.getElementById("step-result"),
-    ];
-    const progressFill = document.getElementById("progress-fill");
-    const basesCarousel = document.getElementById("bases-carousel");
-    const charmsGrid = document.getElementById("charms-grid");
-    const emptyState = document.getElementById("empty-state");
-    const previewBase = document.getElementById(
-      "preview-base"
-    ) as HTMLImageElement | null;
-    const previewCharmContainer = document.getElementById(
-      "preview-charm-container"
-    );
-    const previewCharm = document.getElementById(
-      "preview-charm"
-    ) as HTMLImageElement | null;
-    const finishBtn = document.getElementById(
-      "finish-btn"
-    ) as HTMLButtonElement | null;
-    const backTo1 = document.getElementById("back-to-1");
-    const backTo2 = document.getElementById("back-to-2");
-    const resetBtn = document.getElementById("reset-btn");
-
-    // Guard: every critical element must exist
-    if (
-      !progressFill ||
-      !basesCarousel ||
-      !charmsGrid ||
-      !emptyState ||
-      !previewBase ||
-      !previewCharmContainer ||
-      !previewCharm ||
-      !finishBtn ||
-      !backTo1 ||
-      !backTo2 ||
-      !resetBtn
-    )
-      return;
-
-    const stepDots = document.querySelectorAll(".step-dot");
-
-    // ─── Render Charms ───
-    charmsGrid.innerHTML = dijes
-      .map(
-        (dije, i) => `
-      <button class="charm-card" data-index="${i}" style="animation-delay:${
-          i * 60
-        }ms">
-        <div class="charm-img-wrap">
-          <img src="${dije.url}" alt="${dije.name}" loading="lazy" />
-        </div>
-        <span class="charm-name">${dije.name}</span>
-      </button>
-    `
-      )
-      .join("");
-
-    // ─── Step Navigation ───
-    function goToStep(newStep: number) {
-      // Map step number to array index (step 4 = result = index 3)
-      const currentIdx = state.step <= 3 ? state.step - 1 : 3;
-      const currentEl = stepEls[currentIdx];
-
-      // Hide current panel
-      if (currentEl) {
-        currentEl.classList.remove("is-visible");
-      }
-
-      state.step = newStep;
-
-      // Update progress fill (0%, 50%, 100%)
-      const fillPercent = newStep <= 1 ? 0 : newStep === 2 ? 50 : 100;
-      progressFill.style.width = `${fillPercent}%`;
-
-      // Update step dots
-      stepDots.forEach((dot, i) => {
-        const dotCircle = dot.querySelector(".dot-circle");
-        const dotSpan = dotCircle?.querySelector("span");
-        if (!dotCircle || !dotSpan) return;
-
-        dot.classList.remove("is-active", "is-done");
-
-        if (i + 1 < state.step) {
-          dot.classList.add("is-done");
-          dotSpan.innerHTML =
-            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-        } else if (i + 1 === state.step) {
-          dot.classList.add("is-active");
-          dotSpan.textContent = `${i + 1}`;
-        } else {
-          dotSpan.textContent = `${i + 1}`;
-        }
-      });
-
-      // Show new panel with a slight delay for the exit transition to finish
-      const newIdx = newStep <= 3 ? newStep - 1 : 3;
-      const newEl = stepEls[newIdx];
-      setTimeout(() => {
-        if (newEl) {
-          newEl.classList.add("is-visible");
-        }
-      }, 220);
-    }
-
-    // ─── Step 1: Category Selection ───
-    document.querySelectorAll(".cat-card").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const cat = (btn as HTMLElement).dataset.cat;
-        if (!cat) return;
-
-        state.category = cat;
-        state.base = null;
-        state.charm = null;
-
-        // Reset preview
-        resetPreview();
-
-        // Populate bases for this category
-        const bases = categoryBases[cat] || [];
-        basesCarousel.innerHTML = bases
-          .map(
-            (url, i) => `
-          <button class="base-card" data-url="${url}" style="animation-delay:${
-              i * 70
-            }ms">
-            <img src="${url}" alt="Base ${i + 1}" loading="lazy" />
-            <span class="base-label">Opción ${i + 1}</span>
-            <div class="base-ring"></div>
-          </button>
-        `
-          )
-          .join("");
-
-        // Attach base listeners
-        basesCarousel.querySelectorAll(".base-card").forEach((baseEl) => {
-          baseEl.addEventListener("click", () => {
-            // Deselect all
-            basesCarousel
-              .querySelectorAll(".base-card")
-              .forEach((el) => el.classList.remove("is-selected"));
-            // Select this one
-            baseEl.classList.add("is-selected");
-
-            state.base = (baseEl as HTMLElement).dataset.url || null;
-
-            // Update preview
-            if (state.base) {
-              emptyState.classList.add("is-hidden");
-              previewBase.src = state.base;
-              previewBase.classList.add("is-shown");
-            }
-
-            // Auto-advance to step 3
-            setTimeout(() => goToStep(3), 500);
-          });
-        });
-
-        goToStep(2);
-      });
-    });
-
-    // ─── Step 2: Back ───
-    backTo1.addEventListener("click", () => goToStep(1));
-
-    // ─── Step 3: Back ───
-    backTo2.addEventListener("click", () => {
-      state.charm = null;
-      charmsGrid
-        .querySelectorAll(".charm-card")
-        .forEach((el) => el.classList.remove("is-selected"));
-      previewCharmContainer.classList.remove("is-shown");
-      finishBtn.disabled = true;
-      goToStep(2);
-    });
-
-    // ─── Step 3: Charm Selection ───
-    charmsGrid.querySelectorAll(".charm-card").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const index = parseInt((btn as HTMLElement).dataset.index || "0", 10);
-        const charm = dijes[index];
-        if (!charm) return;
-
-        // Deselect all charms
-        charmsGrid
-          .querySelectorAll(".charm-card")
-          .forEach((el) => el.classList.remove("is-selected"));
-        btn.classList.add("is-selected");
-
-        state.charm = charm;
-
-        // Position charm based on category
-        const posMap: Record<string, string> = {
-          collares:
-            "bottom: 18%; left: 50%; transform: translateX(-50%); width: 56px; height: 56px;",
-          pulseras:
-            "top: 50%; left: 22%; transform: translateY(-50%); width: 44px; height: 44px;",
-          anillos:
-            "top: 32%; left: 50%; transform: translateX(-50%); width: 40px; height: 40px;",
-          aretes:
-            "bottom: 22%; left: 50%; transform: translateX(-50%); width: 48px; height: 48px;",
-        };
-        previewCharm.style.cssText =
-          posMap[state.category || ""] || posMap.aretes;
-        previewCharm.src = charm.url;
-        previewCharmContainer.classList.add("is-shown");
-
-        finishBtn.disabled = false;
-      });
-    });
-
-    // ─── Finish ───
-    finishBtn.addEventListener("click", () => goToStep(4));
-
-    // ─── Reset ───
-    resetBtn.addEventListener("click", () => {
-      state = { step: 1, category: null, base: null, charm: null };
-      resetPreview();
-      charmsGrid
-        .querySelectorAll(".charm-card")
-        .forEach((el) => el.classList.remove("is-selected"));
-      finishBtn.disabled = true;
-      goToStep(1);
-    });
-
-    // ─── Helpers ───
-    function resetPreview() {
-      previewBase.classList.remove("is-shown");
-      previewCharmContainer.classList.remove("is-shown");
-      emptyState.classList.remove("is-hidden");
-    }
-  });
-</script>
+<script type="module" src="/src/scripts/personalize.ts"></script>
 
 <style>
-  /* ═══════════════════════════════════════════════
-     Design Tokens (component-scoped)
-     ═══════════════════════════════════════════════ */
   .custom-page {
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -602,9 +334,6 @@ const dijes = [
     padding-bottom: 80px;
   }
 
-  /* ═══════════════════════════════════════════════
-     Page Header
-     ═══════════════════════════════════════════════ */
   .custom-header {
     text-align: center;
     max-width: 580px;
@@ -649,9 +378,6 @@ const dijes = [
     margin: 0 auto;
   }
 
-  /* ═══════════════════════════════════════════════
-     Customizer Layout
-     ═══════════════════════════════════════════════ */
   .customizer-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -669,7 +395,6 @@ const dijes = [
     border: 1px solid rgba(232, 75, 16, 0.06);
   }
 
-  /* ─── Controls Panel ─── */
   .customizer__controls {
     padding: 44px 48px;
     background: linear-gradient(145deg, #fdfbf7 0%, #f7f2ea 100%);
@@ -678,7 +403,6 @@ const dijes = [
     border-right: 1px solid rgba(232, 75, 16, 0.06);
   }
 
-  /* ─── Preview Panel ─── */
   .customizer__preview {
     padding: 48px;
     display: flex;
@@ -688,9 +412,6 @@ const dijes = [
     position: relative;
   }
 
-  /* ═══════════════════════════════════════════════
-     Progress Track
-     ═══════════════════════════════════════════════ */
   .progress-track {
     display: flex;
     align-items: flex-start;
@@ -758,7 +479,6 @@ const dijes = [
     transition: color var(--dur-normal) var(--ease-out);
   }
 
-  /* Active dot */
   .step-dot.is-active .dot-circle {
     background: var(--brand-vermillion);
     box-shadow: 0 4px 16px rgba(232, 75, 16, 0.3);
@@ -773,7 +493,6 @@ const dijes = [
     color: var(--brand-vermillion);
   }
 
-  /* Done dot */
   .step-dot.is-done .dot-circle {
     background: var(--brand-gold);
     box-shadow: 0 3px 12px rgba(245, 192, 32, 0.25);
@@ -787,9 +506,6 @@ const dijes = [
     color: var(--brand-gold);
   }
 
-  /* ═══════════════════════════════════════════════
-     Step Panels
-     ═══════════════════════════════════════════════ */
   .steps-container {
     position: relative;
     flex: 1;
@@ -837,9 +553,6 @@ const dijes = [
     margin-bottom: 0;
   }
 
-  /* ═══════════════════════════════════════════════
-     Back Button
-     ═══════════════════════════════════════════════ */
   .back-btn {
     display: inline-flex;
     align-items: center;
@@ -865,9 +578,6 @@ const dijes = [
     transform: scale(0.97);
   }
 
-  /* ═══════════════════════════════════════════════
-     Category Grid (Step 1)
-     ═══════════════════════════════════════════════ */
   .cat-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -947,9 +657,6 @@ const dijes = [
     color: var(--brand-text);
   }
 
-  /* ═══════════════════════════════════════════════
-     Bases Carousel (Step 2)
-     ═══════════════════════════════════════════════ */
   .bases-row {
     display: flex;
     gap: 14px;
@@ -1036,9 +743,6 @@ const dijes = [
     border-color: var(--brand-vermillion);
   }
 
-  /* ═══════════════════════════════════════════════
-     Charms Grid (Step 3)
-     ═══════════════════════════════════════════════ */
   .charms-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1103,9 +807,6 @@ const dijes = [
     box-shadow: 0 0 0 3px rgba(232, 75, 16, 0.08);
   }
 
-  /* ═══════════════════════════════════════════════
-     CTA & Outline Buttons
-     ═══════════════════════════════════════════════ */
   .cta-btn {
     display: inline-flex;
     align-items: center;
@@ -1170,9 +871,6 @@ const dijes = [
     transform: scale(0.97);
   }
 
-  /* ═══════════════════════════════════════════════
-     Result Panel
-     ═══════════════════════════════════════════════ */
   .result-content {
     text-align: center;
     display: flex;
@@ -1230,9 +928,6 @@ const dijes = [
     box-shadow: 0 12px 32px -4px rgba(37, 211, 102, 0.4);
   }
 
-  /* ═══════════════════════════════════════════════
-     Preview Canvas
-     ═══════════════════════════════════════════════ */
   .preview-canvas {
     width: 100%;
     max-width: 380px;
@@ -1251,7 +946,6 @@ const dijes = [
     overflow: hidden;
   }
 
-  /* Decorative Corners */
   .corner {
     position: absolute;
     width: 20px;
@@ -1288,7 +982,7 @@ const dijes = [
     border-radius: 0 0 4px 0;
   }
 
-  /* Empty State */
+
   .preview-empty {
     display: flex;
     flex-direction: column;
@@ -1308,7 +1002,6 @@ const dijes = [
     pointer-events: none;
   }
 
-  /* Base Image */
   .preview-base-img {
     position: absolute;
     inset: 0;
@@ -1327,7 +1020,7 @@ const dijes = [
     transform: scale(1);
   }
 
-  /* Charm Overlay */
+
   .preview-charm-wrap {
     position: absolute;
     inset: 0;
@@ -1356,7 +1049,6 @@ const dijes = [
       height var(--dur-normal) var(--ease-out);
   }
 
-  /* Pedestal Shadow */
   .pedestal-shadow {
     position: absolute;
     bottom: 28px;
@@ -1373,9 +1065,6 @@ const dijes = [
     z-index: 0;
   }
 
-  /* ═══════════════════════════════════════════════
-     Animations
-     ═══════════════════════════════════════════════ */
   @keyframes staggerFadeIn {
     from {
       opacity: 0;
@@ -1398,9 +1087,6 @@ const dijes = [
     }
   }
 
-  /* ═══════════════════════════════════════════════
-     Responsive
-     ═══════════════════════════════════════════════ */
   @media (max-width: 900px) {
     .customizer {
       grid-template-columns: 1fr;
@@ -1482,9 +1168,6 @@ const dijes = [
     }
   }
 
-  /* ═══════════════════════════════════════════════
-     Reduced Motion
-     ═══════════════════════════════════════════════ */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
