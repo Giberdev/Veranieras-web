@@ -1,4 +1,3 @@
-// Client script for the personalizer UI (typed)
 type Dije = { url: string; name: string };
 type CategoryBases = Record<string, string[]>;
 
