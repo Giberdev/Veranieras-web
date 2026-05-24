@@ -19,9 +19,7 @@ function validateDijes(data) {
     return ok;
   });
 }
-
-// 1. Definimos la función con toda la lógica del personalizador
-function initPersonalizer() {
+export function initPersonalizer() {
   console.log('Cargado correctamente');
   const container = document.getElementById('customizer-container');
   if (!container) {
@@ -52,7 +50,6 @@ function initPersonalizer() {
     return;
   }
 
-  // State
   let state = { step: 1, category: null, base: null, charm: null };
 
   const stepEls = [
@@ -95,7 +92,6 @@ function initPersonalizer() {
     setTimeout(() => { if (newEl) newEl.classList.add('is-visible'); }, 220);
   }
 
-  // render dijes
   charmsGrid.innerHTML = '';
   dijes.forEach((dije, i) => {
     const button = document.createElement('button');
@@ -119,7 +115,6 @@ function initPersonalizer() {
     emptyState?.classList.remove('is-hidden');
   }
 
-  // category buttons
   Array.from(document.querySelectorAll('.cat-card')).forEach((btn) => {
     btn.addEventListener('click', () => {
       const cat = btn.dataset.cat;

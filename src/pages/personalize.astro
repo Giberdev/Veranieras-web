@@ -317,7 +317,14 @@ const dijes = [
   </main>
 </MainLayout>
 
-<script is:inline src="src/scripts/personalize.js"></script>
+<script>
+  import { initPersonalizer } from "../scripts/personalize.js";
+
+  document.addEventListener('astro:page-load', () => {
+    initPersonalizer();
+  });
+
+</script>
 
 <style>
   .custom-page {
