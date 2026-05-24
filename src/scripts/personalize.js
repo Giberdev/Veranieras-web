@@ -1,19 +1,9 @@
-type Dije = { url: string; name: string };
-type CategoryBases = Record<string, string[]>;
-
-interface State {
-  step: number;
-  category: string | null;
-  base: string | null;
-  charm: Dije | null;
-}
-
-function validateCategoryBases(data: unknown): CategoryBases {
+function validateCategoryBases(data) {
   if (typeof data !== 'object' || data === null) return {};
-  const result: CategoryBases = {};
-  for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
+  const result = {};
+  for (const [key, value] of Object.entries(data)) {
     if (Array.isArray(value) && value.every((v) => typeof v === 'string')) {
-      result[key] = value as string[];
+      result[key] = value;
     } else {
       console.warn(`La categoría "${key}" tiene datos inválidos y será omitida.`);
     }
@@ -21,18 +11,23 @@ function validateCategoryBases(data: unknown): CategoryBases {
   return result;
 }
 
-function validateDijes(data: unknown): Dije[] {
+function validateDijes(data) {
   if (!Array.isArray(data)) return [];
-  return (data as unknown[]).filter((dije): dije is Dije => {
-    const ok = typeof dije === 'object' && dije !== null && typeof (dije as any).url === 'string' && typeof (dije as any).name === 'string';
+  return data.filter((dije) => {
+    const ok = typeof dije === 'object' && dije !== null && typeof dije.url === 'string' && typeof dije.name === 'string';
     if (!ok) console.warn('Un dije fue omitido por tener datos incompletos:', dije);
     return ok;
-  }) as Dije[];
+  });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+// 1. Definimos la función con toda la lógica del personalizador
+function initPersonalizer() {
+  console.log('Cargado correctamente');
   const container = document.getElementById('customizer-container');
-  if (!container) return;
+  if (!container) {
+    console.warn('Personalizer: contenedor no encontrado, abortando inicialización.');
+    return;
+  }
 
   const rawBases = JSON.parse(container.dataset.bases || '{}');
   const rawDijes = JSON.parse(container.dataset.dijes || '[]');
@@ -40,18 +35,17 @@ window.addEventListener('DOMContentLoaded', () => {
   const categoryBases = validateCategoryBases(rawBases);
   const dijes = validateDijes(rawDijes);
 
-  // Elements (narrow types when possible)
-  const progressFill = document.getElementById('progress-fill') as HTMLElement | null;
-  const basesCarousel = document.getElementById('bases-carousel') as HTMLElement | null;
-  const charmsGrid = document.getElementById('charms-grid') as HTMLElement | null;
-  const emptyState = document.getElementById('empty-state') as HTMLElement | null;
-  const previewBase = document.getElementById('preview-base') as HTMLImageElement | null;
-  const previewCharmContainer = document.getElementById('preview-charm-container') as HTMLElement | null;
-  const previewCharm = document.getElementById('preview-charm') as HTMLImageElement | null;
-  const finishBtn = document.getElementById('finish-btn') as HTMLButtonElement | null;
-  const backTo1 = document.getElementById('back-to-1') as HTMLElement | null;
-  const backTo2 = document.getElementById('back-to-2') as HTMLElement | null;
-  const resetBtn = document.getElementById('reset-btn') as HTMLElement | null;
+  const progressFill = document.getElementById('progress-fill');
+  const basesCarousel = document.getElementById('bases-carousel');
+  const charmsGrid = document.getElementById('charms-grid');
+  const emptyState = document.getElementById('empty-state');
+  const previewBase = document.getElementById('preview-base');
+  const previewCharmContainer = document.getElementById('preview-charm-container');
+  const previewCharm = document.getElementById('preview-charm');
+  const finishBtn = document.getElementById('finish-btn');
+  const backTo1 = document.getElementById('back-to-1');
+  const backTo2 = document.getElementById('back-to-2');
+  const resetBtn = document.getElementById('reset-btn');
 
   if (!progressFill || !basesCarousel || !charmsGrid || !emptyState || !previewBase || !previewCharmContainer || !previewCharm || !finishBtn || !backTo1 || !backTo2 || !resetBtn) {
     console.warn('Personalizer: elementos requeridos no encontrados, abortando inicialización.');
@@ -59,7 +53,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   // State
-  let state: State = { step: 1, category: null, base: null, charm: null };
+  let state = { step: 1, category: null, base: null, charm: null };
 
   const stepEls = [
     document.getElementById('step-1'),
@@ -68,16 +62,16 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('step-result')
   ];
 
-  const stepDots = Array.from(document.querySelectorAll('.step-dot')) as HTMLElement[];
+  const stepDots = Array.from(document.querySelectorAll('.step-dot'));
 
-  function goToStep(newStep: number) {
+  function goToStep(newStep) {
     const currentIdx = state.step <= 3 ? state.step - 1 : 3;
     const currentEl = stepEls[currentIdx];
     if (currentEl) currentEl.classList.remove('is-visible');
 
     state.step = newStep;
     const fillPercent = newStep <= 1 ? 0 : newStep === 2 ? 50 : 100;
-    progressFill.style.width = `${fillPercent}%`;
+    if (progressFill) progressFill.style.width = `${fillPercent}%`;
 
     stepDots.forEach((dot, i) => {
       const dotCircle = dot.querySelector('.dot-circle');
@@ -120,15 +114,15 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   function resetPreview() {
-    previewBase.classList.remove('is-shown');
-    previewCharmContainer.classList.remove('is-shown');
-    emptyState.classList.remove('is-hidden');
+    previewBase?.classList.remove('is-shown');
+    previewCharmContainer?.classList.remove('is-shown');
+    emptyState?.classList.remove('is-hidden');
   }
 
   // category buttons
   Array.from(document.querySelectorAll('.cat-card')).forEach((btn) => {
     btn.addEventListener('click', () => {
-      const cat = (btn as HTMLElement).dataset.cat;
+      const cat = btn.dataset.cat;
       if (!cat) return;
 
       state.category = cat;
@@ -144,7 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
           Array.from(basesCarousel.querySelectorAll('.base-card')).forEach((el) => el.classList.remove('is-selected'));
           baseEl.classList.add('is-selected');
 
-          state.base = (baseEl as HTMLElement).dataset.url || null;
+          state.base = baseEl.dataset.url || null;
 
           if (state.base) {
             emptyState.classList.add('is-hidden');
@@ -172,7 +166,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   Array.from(charmsGrid.querySelectorAll('.charm-card')).forEach((btn) => {
     btn.addEventListener('click', () => {
-      const index = parseInt((btn as HTMLElement).dataset.index || '0', 10);
+      const index = parseInt(btn.dataset.index || '0', 10);
       const charm = dijes[index];
       if (!charm) return;
 
@@ -180,7 +174,7 @@ window.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('is-selected');
 
       state.charm = charm;
-      const posMap: Record<string, string> = {
+      const posMap = {
         collares: 'bottom: 18%; left: 50%; transform: translateX(-50%); width: 56px; height: 56px;',
         pulseras: 'top: 50%; left: 22%; transform: translateY(-50%); width: 44px; height: 44px;',
         anillos: 'top: 32%; left: 50%; transform: translateX(-50%); width: 40px; height: 40px;',
@@ -197,16 +191,13 @@ window.addEventListener('DOMContentLoaded', () => {
   finishBtn.addEventListener('click', () => goToStep(4));
 
   resetBtn.addEventListener('click', () => {
-    // Ensure we transition UI first from whatever step we're on back to step 1
     goToStep(1);
-
-    // Then clear state and UI selections
     state = { step: 1, category: null, base: null, charm: null };
     resetPreview();
     Array.from(charmsGrid.querySelectorAll('.charm-card')).forEach((el) => el.classList.remove('is-selected'));
     Array.from(document.querySelectorAll('.base-card')).forEach((el) => el.classList.remove('is-selected'));
     finishBtn.disabled = true;
   });
-});
+} 
 
-export {};
+document.addEventListener('astro:page-load', initPersonalizer);
